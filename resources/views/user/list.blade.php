@@ -1,0 +1,35 @@
+@extends('layouts.layout')
+
+@section('title', 'Listado de Usuarios')
+
+@section('content')
+    <div class="container">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Número de documento</th>
+                <th scope="col">Teléfono</th>
+                <th scope="col">Dirección</th>
+                <th scope="col">Código Antiguo</th>
+                <th scope="col">Acción</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            @foreach($users as $user)
+                <tr>
+                    <td>{{$user->id}}</td>
+                    <td>{{$user->name}}</td>
+                    <td>{{$user->document_number}}</td>
+                    <td>{{$user->phone_number}}</td>
+                    <td>{{$user->address}}</td>
+                    <td>{{$user->old_code}}</td>
+                    <td><a href="{{ route('user.show', $user->id) }}">VER</a></td>
+                    <td><a href="{{ route('user.edit', $user->id) }}">EDITAR</a></td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+@endsection
