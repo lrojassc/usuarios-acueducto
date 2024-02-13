@@ -29,11 +29,12 @@ class UserFactory extends Factory
             'document_number' => fake()->numberBetween(1, 123456789),
             'email' => fake()->unique()->safeEmail(),
             'phone_number' => fake()->phoneNumber(),
-            'old_code' => fake()->numberBetween(1, 500),
+            'old_code' => fake()->numberBetween(1, 10000),
             'address' => fake()->address(),
             'city' => fake()->city(),
             'municipality' => fake()->country(),
             'password' => static::$password ??= Hash::make('password'),
+            'status' => 'ACTIVE'
         ];
     }
 }

@@ -37,7 +37,6 @@ class UserController extends Controller
             'userAddress' => ['required', 'string'],
             'userCity' => ['required', 'string'],
             'userMunicipality' => ['required', 'string'],
-
         ]);
 
         $user = new User();

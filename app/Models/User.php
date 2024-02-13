@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static paginate()
@@ -26,5 +27,15 @@ class User extends Model
                 return strtolower($value);
             }
         );
+    }
+
+    /**
+     * Relación uno a mucho
+     *
+     * @return HasMany
+     */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany('App\Models\Invoice');
     }
 }
