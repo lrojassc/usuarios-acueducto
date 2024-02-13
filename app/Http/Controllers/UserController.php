@@ -13,7 +13,7 @@ class UserController extends Controller
     protected static string $password;
 
     public function list() {
-        $users = User::orderBy('id', 'desc')->paginate();
+        $users = User::all();
 
         return view('user.list', compact('users'));
     }

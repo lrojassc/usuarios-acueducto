@@ -16,6 +16,16 @@ class User extends Model
 {
     use HasFactory;
 
+    /**
+     * Relación uno a mucho
+     *
+     * @return HasMany
+     */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany('App\Models\Invoice');
+    }
+
     protected function name(): Attribute
     {
         return Attribute::make(
@@ -30,12 +40,19 @@ class User extends Model
     }
 
     /**
-     * Relación uno a mucho
-     *
-     * @return HasMany
+     * @return array
      */
-    public function invoices(): HasMany
+    public function getDocumentAndName(): array
     {
-        return $this->hasMany('App\Models\Invoice');
+        $data_user = [];
+
+        $users = User::all();
+        foreach ($users as $user) {
+            $data_user[] = [
+                'id' => $user->id,
+                'name' => $user->name
+            ];
+        }
+        return $data_user;
     }
 }

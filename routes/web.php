@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -26,4 +27,11 @@ Route::controller(UserController::class)->group(function() {
     Route::get('/admin/user/show/{user}', 'show')->name('user.show');
     Route::get('/admin/user/edit/{user}', 'edit')->name('user.edit');
     Route::put('/admin/user/update/{user}', 'update')->name('user.update');
+});
+
+Route::controller(InvoiceController::class)->group(function() {
+    Route::get('/admin/invoice/list', 'list')->name('invoice.list');
+
+    Route::get('/admin/invoice/create', 'create')->name('invoice.create');
+    Route::post('/admin/invoice/store', 'store')->name('invoice.store');
 });

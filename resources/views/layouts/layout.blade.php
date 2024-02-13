@@ -34,6 +34,22 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('invoice.list') }}">Listado Facturas</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('invoice.create') }}">Crear Factura</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
