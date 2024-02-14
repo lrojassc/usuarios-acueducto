@@ -33,6 +33,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('invoice.create') }}">Crear Factura</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('invoice.create_massive') }}">Generar Facturas Masivas</a>
+                    </li>
                 </ul>
             </div>
         </div>

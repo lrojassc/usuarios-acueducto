@@ -34,4 +34,6 @@ Route::controller(InvoiceController::class)->group(function() {
 
     Route::get('/admin/invoice/create', 'create')->name('invoice.create');
     Route::post('/admin/invoice/store', 'store')->name('invoice.store');
+
+    Route::get('/admin/invoice/create-massive', 'createMassive')->name('invoice.create_massive');
 });

@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 
 class InvoiceController extends Controller
 {
@@ -56,6 +57,23 @@ class InvoiceController extends Controller
         $invoice->user_id = $request->userInvoice;
 
         $invoice->save();
+
+        return redirect()->route('invoice.list');
+    }
+
+    public function createMassive() {
+        $users = User::all();
+
+        foreach ($users as $user) {
+            $invoice = new Invoice();
+
+            $invoice->value = 10000;
+            $invoice->description = 'Servicio mes: ' . 'Febrero';
+            $invoice->status = 'PENDIENTE';
+            $invoice->user_id = $user->id;
+
+            $invoice->save();
+        }
 
         return redirect()->route('invoice.list');
     }
