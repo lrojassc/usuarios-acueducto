@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="justify-content-center">
             <div class="card">
                 <div class="card-header">Nuevo Usuario</div>
                 <div class="card-body">
