@@ -54,6 +54,7 @@ class InvoiceController extends Controller
         $invoice->value = $request->valueInvoice;
         $invoice->description = $request->descriptionInvoice;
         $invoice->status = 'PENDIENTE';
+        $invoice->concept = $request->conceptInvoice;
         $invoice->user_id = $request->userInvoice;
 
         $invoice->save();
@@ -63,12 +64,19 @@ class InvoiceController extends Controller
 
     public function createMassive() {
         $users = User::all();
+        $months = [
+            '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
+            '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
+        ];
+        $current_month = $months[date('m')];
 
         foreach ($users as $user) {
             $invoice = new Invoice();
 
             $invoice->value = 10000;
-            $invoice->description = 'Servicio mes: ' . 'Febrero';
+            $invoice->description = 'Servicio de agua mes - ' . $current_month;
+            $invoice->month_invoiced = $current_month;
+            $invoice->concept = 'MENSUALIDAD';
             $invoice->status = 'PENDIENTE';
             $invoice->user_id = $user->id;
 

@@ -28,6 +28,13 @@
                             <label for="descriptionInvoice">Descripción</label>
                             @error('descriptionInvoice') <p>{{ $message }}</p> @enderror
                         </div>
+                        <div class="form-floating mb-3 mt-3 col">
+                            <select class="form-select" id="conceptInvoice" name="conceptInvoice">
+                                <option selected value="RECONEXION">RECONEXIÓN</option>
+                                <option value="SUSCRIPCION">DERECHO DE SUSCRIPCIÓN</option>
+                            </select>
+                            <label for="conceptInvoice">Concepto</label>
+                        </div>
                         <button id="btn-guardar_factura" type="submit" class="btn btn-outline-secondary">Guardar</button>
                     </form>
                 </div>

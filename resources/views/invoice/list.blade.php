@@ -11,6 +11,7 @@
                 <th scope="col">Valor</th>
                 <th scope="col">Descripción</th>
                 <th scope="col">Estado</th>
+                <th scope="col">Concepto</th>
                 <th scope="col">Usuario</th>
                 <th scope="col">Acción</th>
             </tr>
@@ -21,6 +22,7 @@
                     <td>{{$invoice->id}}</td>
                     <td>{{$invoice->value}}</td>
                     <td>{{$invoice->description}}</td>
+                    <td>{{$invoice->concept}}</td>
                     <td>{{$invoice->status}}</td>
                     <td><a href="{{ route('user.show', $invoice->user_id['id']) }}">{{$invoice->user_id['name']}}</a></td>
                     <td><a href="#">PAGAR</a></td>
