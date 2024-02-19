@@ -22,10 +22,10 @@
                     <td>{{$invoice->id}}</td>
                     <td>{{$invoice->value}}</td>
                     <td>{{$invoice->description}}</td>
-                    <td>{{$invoice->concept}}</td>
                     <td>{{$invoice->status}}</td>
+                    <td>{{$invoice->concept}}</td>
                     <td><a href="{{ route('user.show', $invoice->user_id['id']) }}">{{$invoice->user_id['name']}}</a></td>
-                    <td><a href="#">PAGAR</a></td>
+                    <td><a href="{{ route('invoice.show', $invoice->id) }}">PAGAR</a></td>
                 </tr>
             @endforeach
             </tbody>

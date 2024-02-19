@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -35,5 +36,11 @@ Route::controller(InvoiceController::class)->group(function() {
     Route::get('/admin/invoice/create', 'create')->name('invoice.create');
     Route::post('/admin/invoice/store', 'store')->name('invoice.store');
 
+    Route::get('/admin/invoice/show/{invoice}', 'show')->name('invoice.show');
+
     Route::get('/admin/invoice/create-massive', 'createMassive')->name('invoice.create_massive');
+});
+
+Route::controller(PaymentController::class)->group(function () {
+    Route::put('/admin/invoice/payment/{invoice}', 'payment')->name('payment.invoice');
 });

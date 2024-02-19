@@ -3,13 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Date;
 
 class InvoiceController extends Controller
 {
+
+    /**
+     * @var array|string[]
+     */
+    private array $monthsDetails = [
+        'ENERO' => 'ENERO', 'FEBRERO' => 'FEBRERO', 'MARZO' => 'MARZO', 'ABRIL' => 'ABRIL',
+        'MAYO' => 'MAYO', 'JUNIO' => 'JUNIO', 'JULIO' => 'JULIO', 'AGOSTO' => 'AGOSTO', 'SEPTIEMBRE' => 'SEPTIEMBRE',
+        'OCTUBRE' => 'OCTUBRE', 'NOVIEMBRE' => 'NOVIEMBRE', 'DICIEMBRE' => 'DICIEMBRE'
+    ];
+
+    /**
+     * @var array|string[]
+     */
+    private array $monthsNumber = [
+        '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
+        '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
+    ];
 
     /**
      * Lista todas las facturas
@@ -32,8 +49,13 @@ class InvoiceController extends Controller
         $user = new User();
         $data_users = $user->getDocumentAndName();
 
+        $current_month = $this->monthsNumber[date('m')];
+
+        // Eliminar del listado de meses, el mes actual para que no se repita en el select
+        unset($this->monthsDetails[$current_month]);
+
         //return $users;
-        return view('invoice.create', ['data_users' => $data_users]);
+        return view('invoice.create', ['data_users' => $data_users, 'months' => $this->monthsDetails, 'current_month' => $current_month]);
     }
 
     /**
@@ -52,6 +74,7 @@ class InvoiceController extends Controller
 
         $invoice = new Invoice();
         $invoice->value = $request->valueInvoice;
+        $invoice->month_invoiced = $request->monthInvoice;
         $invoice->description = $request->descriptionInvoice;
         $invoice->status = 'PENDIENTE';
         $invoice->concept = $request->conceptInvoice;
@@ -62,13 +85,10 @@ class InvoiceController extends Controller
         return redirect()->route('invoice.list');
     }
 
-    public function createMassive() {
+    public function createMassive(): RedirectResponse
+    {
         $users = User::all();
-        $months = [
-            '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
-            '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
-        ];
-        $current_month = $months[date('m')];
+        $current_month = $this->monthsNumber[date('m')];
 
         foreach ($users as $user) {
             $invoice = new Invoice();
@@ -85,4 +105,10 @@ class InvoiceController extends Controller
 
         return redirect()->route('invoice.list');
     }
+
+    public function show(Invoice $invoice)
+    {
+        return view('invoice.show', compact('invoice'));
+    }
+
 }

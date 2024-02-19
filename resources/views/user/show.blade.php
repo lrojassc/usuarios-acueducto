@@ -10,7 +10,7 @@
     </style>
 
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="justify-content-center">
             <div class="card">
                 <div class="card-header">Información del Usuario</div>
                 <div class="card-body">

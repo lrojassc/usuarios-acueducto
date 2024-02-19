@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="justify-content-center">
             <div class="card">
                 <div class="card-header">Nueva Factura</div>
                 <div class="card-body">
@@ -22,6 +22,15 @@
                             <input type="text" class="form-control" id="valueInvoice" name="valueInvoice" value="{{ old('valueInvoice') }}">
                             <label for="valueInvoice">Valor</label>
                             @error('valueInvoice') <p>{{ $message }}</p> @enderror
+                        </div>
+                        <div class="form-floating mb-3 mt-3 col">
+                            <select class="form-select" id="monthInvoice" name="monthInvoice">
+                                <option selected value="{{ $current_month }}">{{ $current_month }}</option>
+                                @foreach($months as $month)
+                                    <option value="{{ $month }}">{{$month}}</option>
+                                @endforeach
+                            </select>
+                            <label for="monthInvoice">Mes de la Factura</label>
                         </div>
                         <div class="form-floating mb-3 mt-3 col">
                             <input type="text" class="form-control" id="descriptionInvoice" name="descriptionInvoice" value="{{ old('descriptionInvoice') }}">
