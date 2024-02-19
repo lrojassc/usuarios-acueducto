@@ -68,4 +68,9 @@
             </div>
         </div>
     </div>
+    @if($mode == 'show')
+        <div class="container-fluid">
+            @include('invoice.invoices_by_user', $user)
+        </div>
+    @endif
 @endsection

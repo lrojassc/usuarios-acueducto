@@ -55,4 +55,8 @@ class User extends Model
         }
         return $data_user;
     }
+
+    public function id(): string {
+        return $this->id;
+    }
 }

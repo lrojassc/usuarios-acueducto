@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @method static where(string $string, $user_id)
+ */
 class Invoice extends Model
 {
     use HasFactory;
@@ -50,5 +53,27 @@ class Invoice extends Model
                 return ['name' => $user->name, 'id' => $user->id];
             }
         );
+    }
+
+    /**
+     * @param $user_id
+     *
+     * @return array
+     */
+    public function getInvoicesByUser($user_id): array
+    {
+        $invoices = [];
+        $invoices_by_user = Invoice::where('user_id', $user_id)->get();
+        foreach ($invoices_by_user as $key => $invoice) {
+            $invoices[$key] = [
+                'id' => $invoice['id'],
+                'value' => $invoice['value'],
+                'description' => $invoice['description'],
+                'month_invoiced' => $invoice['month_invoiced'],
+                'concept' => $invoice['concept'],
+                'status' => $invoice['status'],
+            ];
+        }
+        return $invoices;
     }
 }

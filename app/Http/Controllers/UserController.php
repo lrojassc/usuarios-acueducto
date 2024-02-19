@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -61,10 +62,9 @@ class UserController extends Controller
         return view('user.show', ['mode' => 'edit'], compact('user'));
     }
 
-    public function show(User $user) {
-        // De esta forma tambien se puede traer la informacion de usuario con su id como parametro user
-        // $user = User::find($user);
-        return view('user.show', ['mode' => 'show'], compact('user'));
+    public function show(User $user, Invoice $invoice) {
+        $invoices = $invoice->getInvoicesByUser($user->id());
+        return view('user.show', ['mode' => 'show', 'user' => $user, 'invoices' => $invoices]);
     }
 
     public function update(Request $request, User $user) {
