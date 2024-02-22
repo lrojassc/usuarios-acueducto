@@ -12,25 +12,32 @@
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #dfdfdf !important; font-size: large">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('index') }}">JUNTA DE ACUEDUCTO</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="{{ route('index') }}">Junta Acueducto Quituro</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('user.create') }}">Crear Usuario</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="flex-direction: row-reverse">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('user.list') }}">Usuarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('user.create') }}">Crear Usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('invoice.list') }}">Facturas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('invoice.create') }}">Crear Factura</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('payment.list') }}">Pagos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('invoice.create_massive') }}">Generar Facturas Masivas</a>
                     </li>
                 </ul>
             </div>

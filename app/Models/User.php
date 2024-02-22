@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static paginate()
@@ -14,6 +15,16 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
+
+    /**
+     * Relación uno a mucho
+     *
+     * @return HasMany
+     */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany('App\Models\Invoice');
+    }
 
     protected function name(): Attribute
     {
@@ -26,5 +37,26 @@ class User extends Model
                 return strtolower($value);
             }
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getDocumentAndName(): array
+    {
+        $data_user = [];
+
+        $users = User::all();
+        foreach ($users as $user) {
+            $data_user[] = [
+                'id' => $user->id,
+                'name' => $user->name
+            ];
+        }
+        return $data_user;
+    }
+
+    public function id(): string {
+        return $this->id;
     }
 }

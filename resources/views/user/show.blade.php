@@ -10,7 +10,7 @@
     </style>
 
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="justify-content-center">
             <div class="card">
                 <div class="card-header">Información del Usuario</div>
                 <div class="card-body">
@@ -22,6 +22,7 @@
                             <div class="form-floating mb-3 mt-3 col-4">
                                 <input type="text" class="form-control" id="editUserName" name="editUserName" value="{{ $user->name }}" @if($mode == 'show') disabled @endif>
                                 <label for="editUserName">Nombre completo</label>
+                                @error('editUserName') <p>{{ $message }}</p> @enderror
                             </div>
                             <div class="form-floating mb-3 mt-3 col-4">
                                 <input type="text" class="form-control" id="editUserDocumentType" name="editUserDocumentType" value="{{ $user->document_type }}" @if($mode == 'show') disabled @else($mode == 'show') disabled @endif>
@@ -40,10 +41,12 @@
                             <div class="form-floating mb-3 mt-3 col-4">
                                 <input type="text" class="form-control" id="editUserPhoneNumber" name="editUserPhoneNumber" value="{{ $user->phone_number }}" @if($mode == 'show') disabled @endif>
                                 <label for="editUserPhoneNumber">Número de teléfono</label>
+                                @error('editUserPhoneNumber') <p>{{ $message }}</p> @enderror
                             </div>
                             <div class="form-floating mb-3 mt-3 col-4">
                                 <input type="text" class="form-control" id="editUserAddress" name="editUserAddress" value="{{ $user->address }}" @if($mode == 'show') disabled @endif>
                                 <label for="editUserAddress">Dirección</label>
+                                @error('editUserAddress') <p>{{ $message }}</p> @enderror
                             </div>
                         </div>
                         <div class="row">
@@ -68,4 +71,9 @@
             </div>
         </div>
     </div>
+    @if($mode == 'show')
+        <div class="container-fluid">
+            @include('invoice.invoices_by_user', $user)
+        </div>
+    @endif
 @endsection

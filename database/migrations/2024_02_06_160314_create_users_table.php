@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('municipality');
             $table->string('password');
+            $table->string('status');
             $table->timestamps();
         });
     }
