@@ -106,9 +106,12 @@ class InvoiceController extends Controller
         return redirect()->route('invoice.list');
     }
 
-    public function show(Invoice $invoice)
+    public function show(Invoice $invoice, Payment $payment)
     {
-        return view('invoice.show', compact('invoice'));
+        $payments = $payment->getPaymentsByInvoiceId($invoice->id);
+        $payment_total = '$' . number_format(num: $payment->getTotalPayment($invoice->id), thousands_separator: '.') ?? '$0';
+
+        return view('invoice.show', compact('invoice', 'payments', 'payment_total'));
     }
 
 }

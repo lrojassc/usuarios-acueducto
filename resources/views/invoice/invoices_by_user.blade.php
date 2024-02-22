@@ -22,4 +22,6 @@
     @endforeach
     </tbody>
 </table>
-<h3>Total de facturas: ${{ $total_invoices }}</h3>
+<p class="fs-5">Valor Pendiente: {{ $total_invoices }}</p>
+<p class="fs-5">Valor Pagado: {{ $total_pagos_realizados }}</p>
+<p class="fs-5">Total Facturas: {{ $total_facturas }}</p>

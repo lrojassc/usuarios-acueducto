@@ -62,13 +62,15 @@ class Invoice extends Model
      */
     public function getInvoicesByUser($user_id): array
     {
+        $payment = new Payment();
         $invoices_by_user = Invoice::where('user_id', $user_id)->get();
         $invoices = [];
-        $total_invoices = 0;
+        $total_valor_pendiente = 0;
+        $total_pagos_realizados = 0;
 
         foreach ($invoices_by_user as $key => $invoice) {
-            $value_invoice = (int)str_replace(["$", "."], '', $invoice['value']);
-            $total_invoices += $value_invoice;
+            $value_invoice_pendiente = (int)str_replace(["$", "."], '', $invoice['value']);
+            $total_valor_pendiente += $value_invoice_pendiente;
             $invoices[$key] = [
                 'id' => $invoice['id'],
                 'value' => $invoice['value'],
@@ -78,9 +80,12 @@ class Invoice extends Model
                 'status' => $invoice['status'],
             ];
 
-            $payment = Payment::where('invoice_id', $invoice['id'])->get();
-            $invoices['total_invoices'] = $total_invoices;
+            $pago_realizado = $payment->getTotalPayment($invoice['id']);
+            $total_pagos_realizados += $pago_realizado;
         }
+        $invoices['total_valor_pendiente'] = $total_valor_pendiente;
+        $invoices['total_pagos_realizados'] = $total_pagos_realizados;
+
         return $invoices;
     }
 }

@@ -44,5 +44,7 @@ Route::controller(InvoiceController::class)->group(function() {
 });
 
 Route::controller(PaymentController::class)->group(function () {
+    Route::get('/admin/payment/list', 'list')->name('payment.list');
+    Route::get('/admin/payment/show/{payment}', 'show')->name('payment.show');
     Route::put('/admin/invoice/payment/{invoice}', 'payment')->name('payment.invoice');
 });

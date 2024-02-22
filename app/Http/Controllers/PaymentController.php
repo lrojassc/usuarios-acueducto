@@ -9,6 +9,17 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
 
+    public function list()
+    {
+        $payments = Payment::all();
+        return view('payment.list', compact('payments'));
+    }
+
+    public function show(Payment $payment)
+    {
+        return view('payment.show', compact('payment'));
+    }
+
     public function payment(Request $request, Invoice $invoice)
     {
         $request->validate([
@@ -34,8 +45,6 @@ class PaymentController extends Controller
 
             $payment->save();
         }
-
-
 
         return redirect()->route('invoice.list');
     }

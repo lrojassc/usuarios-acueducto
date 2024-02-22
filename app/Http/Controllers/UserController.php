@@ -66,10 +66,20 @@ class UserController extends Controller
 
     public function show(User $user, Invoice $invoice) {
         $invoices = $invoice->getInvoicesByUser($user->id());
-        $total_invoices = $invoices['total_invoices'] ?? 0;
-        unset($invoices['total_invoices']);
+        $total_valor_pendiente = '$' . number_format(num: $invoices['total_valor_pendiente'], thousands_separator: '.');
+        $total_pagos_realizados = '$' . number_format(num: $invoices['total_pagos_realizados'], thousands_separator: '.');
+        $total_facturas = $invoices['total_valor_pendiente'] + $invoices['total_pagos_realizados'];
 
-        return view('user.show', ['mode' => 'show', 'user' => $user, 'invoices' => $invoices, 'total_invoices' => $total_invoices]);
+        unset($invoices['total_valor_pendiente'], $invoices['total_pagos_realizados']);
+
+        return view('user.show', [
+            'mode' => 'show',
+            'user' => $user,
+            'invoices' => $invoices,
+            'total_invoices' => $total_valor_pendiente,
+            'total_pagos_realizados' => $total_pagos_realizados,
+            'total_facturas' => '$' . number_format(num: $total_facturas, thousands_separator: '.')
+        ]);
     }
 
     public function update(Request $request, User $user) {

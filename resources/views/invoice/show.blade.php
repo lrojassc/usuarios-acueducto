@@ -60,4 +60,9 @@
             </div>
         </div>
     </div>
+
+
+    <div class="container-fluid">
+        @include('payment.payments_by_invoice', $invoice)
+    </div>
 @endsection
