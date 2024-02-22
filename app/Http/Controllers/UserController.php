@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\UsersImport;
 use App\Models\Invoice;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -64,7 +66,7 @@ class UserController extends Controller
 
     public function show(User $user, Invoice $invoice) {
         $invoices = $invoice->getInvoicesByUser($user->id());
-        $total_invoices = $invoices['total_invoices'];
+        $total_invoices = $invoices['total_invoices'] ?? 0;
         unset($invoices['total_invoices']);
 
         return view('user.show', ['mode' => 'show', 'user' => $user, 'invoices' => $invoices, 'total_invoices' => $total_invoices]);
@@ -86,5 +88,12 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->route('user.list');
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('import_file_users');
+        Excel::import(new UsersImport, $file);
+        return redirect()->route('user.list')->with('success', 'Usuarios importados exitosamente');
     }
 }

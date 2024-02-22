@@ -28,6 +28,8 @@ Route::controller(UserController::class)->group(function() {
     Route::get('/admin/user/show/{user}', 'show')->name('user.show');
     Route::get('/admin/user/edit/{user}', 'edit')->name('user.edit');
     Route::put('/admin/user/update/{user}', 'update')->name('user.update');
+
+    Route::post('/admin/user/import', 'import')->name('user.import');
 });
 
 Route::controller(InvoiceController::class)->group(function() {

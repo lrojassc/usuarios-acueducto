@@ -3,6 +3,11 @@
 @section('title', 'Listado de Usuarios')
 
 @section('content')
+    @if(session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
     <div class="container">
         <table class="table table-striped">
             <thead>
@@ -31,5 +36,10 @@
             @endforeach
             </tbody>
         </table>
+        <form action="{{ route('user.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="import_file_users">
+            <button class="btn btn-primary">Importar</button>
+        </form>
     </div>
 @endsection
