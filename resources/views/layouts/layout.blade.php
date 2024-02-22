@@ -12,6 +12,72 @@
     @vite(['resources/scss/app.scss', 'resources/js/app.js'])
 </head>
 <body>
+    <div class="menu">
+        <ion-icon name="menu-outline"></ion-icon>
+        <ion-icon name="close-outline"></ion-icon>
+    </div>
+    <div class="barra-lateral">
+        <div>
+            <div class="nombre-pagina">
+                <button class="btn fs-4" type="button" id="logo">J.A.Q</button>
+            </div>
+        </div>
+
+        <nav class="navegacion">
+            <ul>
+                <li>
+                    <a id="inbox" href="{{ route('user.list') }}">
+                        <ion-icon name="mail-unread-outline"></ion-icon>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('user.create') }}">
+                        <ion-icon name="star-outline"></ion-icon>
+                        <span>Crear Usuario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('invoice.list') }}">
+                        <ion-icon name="paper-plane-outline"></ion-icon>
+                        <span>Facturas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('invoice.create') }}">
+                        <ion-icon name="document-text-outline"></ion-icon>
+                        <span>Crear Factura</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('payment.list') }}">
+                        <ion-icon name="bookmark-outline"></ion-icon>
+                        <span>Pagos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('invoice.create_massive') }}">
+                        <ion-icon name="alert-circle-outline"></ion-icon>
+                        <span>Crear Facturas</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div>
+            <div class="usuario">
+                <img src="#" alt="">
+                <div class="info-usuario">
+                    <div class="nombre-email">
+                        <span class="nombre">Usuario</span>
+                        <span class="email">Liever Rojas</span>
+                    </div>
+                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
     <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #dfdfdf !important; font-size: large">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('index') }}">Junta Acueducto Quituro</a>
@@ -43,6 +109,7 @@
             </div>
         </div>
     </nav>
+    -->
 
     <main class="py-4">
         @yield('content')
