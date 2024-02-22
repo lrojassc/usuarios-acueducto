@@ -15,7 +15,7 @@ class PaymentController extends Controller
             'paymentValue' => ['required', 'numeric']
         ]);
 
-        $value_invoice = str_replace(array("$", "."), '', $invoice->value);
+        $value_invoice = str_replace(["$", "."], '', $invoice->value);
         $value_payment = $request->paymentValue;
 
         $abono_factura = $value_invoice - $value_payment;

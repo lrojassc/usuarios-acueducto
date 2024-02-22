@@ -64,10 +64,19 @@ class UserController extends Controller
 
     public function show(User $user, Invoice $invoice) {
         $invoices = $invoice->getInvoicesByUser($user->id());
-        return view('user.show', ['mode' => 'show', 'user' => $user, 'invoices' => $invoices]);
+        $total_invoices = $invoices['total_invoices'];
+        unset($invoices['total_invoices']);
+
+        return view('user.show', ['mode' => 'show', 'user' => $user, 'invoices' => $invoices, 'total_invoices' => $total_invoices]);
     }
 
     public function update(Request $request, User $user) {
+        $request->validate([
+            'editUserName' => ['required', 'string'],
+            'editUserPhoneNumber' => ['required', 'numeric'],
+            'editUserAddress' => ['required', 'string']
+        ]);
+
         $user->name = $request->editUserName;
         $user->email = $request->editUserEmail;
         $user->phone_number = $request->editUserPhoneNumber;

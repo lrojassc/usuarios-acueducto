@@ -62,9 +62,13 @@ class Invoice extends Model
      */
     public function getInvoicesByUser($user_id): array
     {
-        $invoices = [];
         $invoices_by_user = Invoice::where('user_id', $user_id)->get();
+        $invoices = [];
+        $total_invoices = 0;
+
         foreach ($invoices_by_user as $key => $invoice) {
+            $value_invoice = (int)str_replace(["$", "."], '', $invoice['value']);
+            $total_invoices += $value_invoice;
             $invoices[$key] = [
                 'id' => $invoice['id'],
                 'value' => $invoice['value'],
@@ -73,6 +77,9 @@ class Invoice extends Model
                 'concept' => $invoice['concept'],
                 'status' => $invoice['status'],
             ];
+
+            $payment = Payment::where('invoice_id', $invoice['id'])->get();
+            $invoices['total_invoices'] = $total_invoices;
         }
         return $invoices;
     }

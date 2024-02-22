@@ -22,3 +22,4 @@
     @endforeach
     </tbody>
 </table>
+<h3>Total de facturas: ${{ $total_invoices }}</h3>
