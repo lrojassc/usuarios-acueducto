@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\MassiveInvoice;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -88,22 +89,38 @@ class InvoiceController extends Controller
     public function createMassive(): RedirectResponse
     {
         $users = User::all();
+        $massive_invoice = new MassiveInvoice();
+
         $current_month = $this->monthsNumber[date('m')];
+        $message_type = 'error';
+        $message = 'No se pueden volver a generar el masivo de facturas del mes de ' . $current_month;
 
-        foreach ($users as $user) {
-            $invoice = new Invoice();
+        $last_massive_invoice = $massive_invoice::all()->last();
+        $last_month_massive_invoice = $last_massive_invoice?->month;
 
-            $invoice->value = 10000;
-            $invoice->description = 'Servicio de agua mes - ' . $current_month;
-            $invoice->month_invoiced = $current_month;
-            $invoice->concept = 'MENSUALIDAD';
-            $invoice->status = 'PENDIENTE';
-            $invoice->user_id = $user->id;
+        if ($last_month_massive_invoice === NULL || $last_month_massive_invoice != $current_month) {
+            foreach ($users as $user) {
+                $invoice = new Invoice();
 
-            $invoice->save();
+                $invoice->value = 10000;
+                $invoice->description = 'Servicio de agua mes - ' . $current_month;
+                $invoice->month_invoiced = $current_month;
+                $invoice->concept = 'MENSUALIDAD';
+                $invoice->status = 'PENDIENTE';
+                $invoice->user_id = $user->id;
+
+                $invoice->save();
+            }
+
+            $massive_invoice->year = date('Y');
+            $massive_invoice->month = $current_month;
+            $massive_invoice->status = 'GENERADO';
+            $massive_invoice->save();
+
+            $message_type = 'success';
+            $message = 'Se acaba de generar el masivo de facturas del mes de ' . $current_month;
         }
-
-        return redirect()->route('invoice.list');
+        return redirect()->route('invoice.list')->with($message_type, $message);
     }
 
     public function show(Invoice $invoice, Payment $payment)

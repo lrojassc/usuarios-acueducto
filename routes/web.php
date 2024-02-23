@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GeneratePdfController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
@@ -47,4 +48,8 @@ Route::controller(PaymentController::class)->group(function () {
     Route::get('/admin/payment/list', 'list')->name('payment.list');
     Route::get('/admin/payment/show/{payment}', 'show')->name('payment.show');
     Route::put('/admin/invoice/payment/{invoice}', 'payment')->name('payment.invoice');
+});
+
+Route::controller(GeneratePdfController::class)->group(function () {
+   Route::get('/admin/pdf', 'getPdf')->name('pdf');
 });

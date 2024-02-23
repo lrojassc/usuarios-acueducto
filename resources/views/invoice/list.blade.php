@@ -3,6 +3,16 @@
 @section('title', 'Listado de Facturas')
 
 @section('content')
+    @if(session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @elseif(session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <div class="container">
         <table class="table table-striped">
             <thead>
