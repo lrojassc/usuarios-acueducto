@@ -116,6 +116,10 @@ body {
     transition: opacity 0.5s ease, width 0.5s ease;
 }
 
+.barra-lateral .navegacion ul {
+    padding-left: 0 ;
+}
+
 .barra-lateral span.oculto {
     opacity: 0;
     width: 0;
@@ -132,7 +136,7 @@ body {
     justify-content: space-around;
 }
 
-.barra-lateral .nombre-pagina ion-icon {
+.barra-lateral .nombre-pagina .icon-menu {
     min-width: 50px;
     font-size: 40px;
     cursor: pointer;
@@ -192,6 +196,7 @@ body {
     width: 100%;
     height: 45px;
     display: flex;
+    justify-content: space-evenly;
     align-items: center;
     text-decoration: none;
     border-radius: 10px;
@@ -280,7 +285,7 @@ body {
     display: flex;
 }
 
-.barra-lateral .usuario img {
+.barra-lateral .usuario .svg-user {
     width: 50px;
     min-width: 50px;
     border-radius: 10px;
@@ -303,12 +308,12 @@ body {
 }
 
 .barra-lateral .usuario .nombre {
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
 }
 
-.barra-lateral .usuario .email {
-    font-size: 13px;
+.barra-lateral .usuario .documento {
+    font-size: 15px;
 }
 
 .barra-lateral .usuario ion-icon {

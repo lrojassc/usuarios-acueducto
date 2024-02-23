@@ -15,7 +15,12 @@
             <td>{{$invoice['id']}}</td>
             <td>{{$invoice['value']}}</td>
             <td>{{$invoice['description']}}</td>
-            <td>{{$invoice['status']}}</td>
+            <td style="@if($invoice['status'] == 'PAGADA') color:green;
+                @elseif($invoice['status'] == 'PAGO PARCIAL') color: orange;
+                @else color: red;
+                @endif
+                ">
+                {{$invoice['status']}}</td>
             <td>{{$invoice['concept']}}</td>
             <td><a href="{{ route('invoice.show', $invoice['id']) }}">PAGAR</a></td>
         </tr>

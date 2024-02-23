@@ -22,30 +22,34 @@ class PaymentController extends Controller
 
     public function payment(Request $request, Invoice $invoice)
     {
-        $request->validate([
-            'paymentValue' => ['required', 'numeric']
-        ]);
-
         $value_invoice = str_replace(["$", "."], '', $invoice->value);
         $value_payment = $request->paymentValue;
-
         $abono_factura = $value_invoice - $value_payment;
 
-        if ($abono_factura < $value_invoice) {
-            $status_invoice = $abono_factura === 0 ? 'PAGADA' : 'PAGO PARCIAL';
-            $invoice->value = $abono_factura;
-            $invoice->status = $status_invoice;
-            $invoice->save();
+        if ($value_payment <= $value_invoice) {
+            $request->validate([
+                'paymentValue' => ['required', 'numeric']
+            ]);
 
-            $payment = new Payment();
-            $payment->value = $request->paymentValue;
-            $payment->description = $request->paymentDescription;
-            $payment->method = 'EFECTIVO';
-            $payment->invoice_id = $invoice->id;
+            if ($abono_factura < $value_invoice) {
+                $status_invoice = $abono_factura === 0 ? 'PAGADA' : 'PAGO PARCIAL';
+                $invoice->value = $abono_factura;
+                $invoice->status = $status_invoice;
+                $invoice->save();
 
-            $payment->save();
+                $payment = new Payment();
+                $payment->value = $request->paymentValue;
+                $payment->description = $request->paymentDescription;
+                $payment->method = 'EFECTIVO';
+                $payment->invoice_id = $invoice->id;
+
+                $payment->save();
+            }
+            return redirect()->route('invoice.list');
+        } else {
+
+            return redirect()->route('invoice.show', ['invoice' => $invoice->id])->with('error', 'El valor del pago no puede ser mayor al de la factura');
         }
 
-        return redirect()->route('invoice.list');
     }
 }
