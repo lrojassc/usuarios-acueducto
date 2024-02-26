@@ -66,9 +66,13 @@
                         @if($mode == 'edit')
                             <button id="btn-guardar_usuario" type="submit" class="btn btn-outline-secondary">Guardar</button>
                         @endif
+
                     </form>
                 </div>
             </div>
+            @if($mode == 'show')
+                @include('invoice.modal_facturas')
+            @endif
         </div>
     </div>
     @if($mode == 'show')

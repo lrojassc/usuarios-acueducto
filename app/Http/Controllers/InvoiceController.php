@@ -86,6 +86,11 @@ class InvoiceController extends Controller
         return redirect()->route('invoice.list');
     }
 
+    /**
+     * Create monthly invoices for all users automatically
+     *
+     * @return RedirectResponse
+     */
     public function createMassive(): RedirectResponse
     {
         $users = User::all();
@@ -98,12 +103,14 @@ class InvoiceController extends Controller
         $last_massive_invoice = $massive_invoice::all()->last();
         $last_month_massive_invoice = $last_massive_invoice?->month;
 
+        $users_without_invoices = $this->getUsersWithoutInvoices($users, $current_month);
         if ($last_month_massive_invoice === NULL || $last_month_massive_invoice != $current_month) {
-            foreach ($users as $user) {
+            foreach ($users_without_invoices as $user) {
                 $invoice = new Invoice();
 
                 $invoice->value = 10000;
                 $invoice->description = 'Servicio de agua mes - ' . $current_month;
+                $invoice->year_invoiced = date('Y');
                 $invoice->month_invoiced = $current_month;
                 $invoice->concept = 'MENSUALIDAD';
                 $invoice->status = 'PENDIENTE';
@@ -129,6 +136,68 @@ class InvoiceController extends Controller
         $payment_total = '$' . number_format(num: $payment->getTotalPayment($invoice->id), thousands_separator: '.') ?? '$0';
 
         return view('invoice.show', compact('invoice', 'payments', 'payment_total'));
+    }
+
+    /**
+     * Generate N number of invoices by user
+     *
+     * @param User $user
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function createInvoicesByUser(User $user, Request $request): RedirectResponse
+    {
+        $months_data = $request->post();
+        $current_year = date('Y') !== $request->year ? date('Y') : $request->year;
+
+        unset($months_data['_token'], $months_data['year']);
+
+        $message_type = 'error';
+        $message = 'Debe seleccionar por lo menos un mes';
+        if (!empty($months_data)) {
+            foreach ($months_data as $month) {
+                $invoice = new Invoice();
+
+                $invoice->value = 10000;
+                $invoice->description = 'Servicio de agua mes - ' . $month;
+                $invoice->year_invoiced = $current_year;
+                $invoice->month_invoiced = $month;
+                $invoice->concept = 'MENSUALIDAD';
+                $invoice->status = 'PENDIENTE';
+                $invoice->user_id = $user->id;
+                $invoice->save();
+            }
+            $message_type = 'success';
+            $message = 'Se acaban de generar facturas para pago adelantado';
+        }
+        return redirect()->route('user.show', $user->id)->with($message_type, $message);
+    }
+
+    /**
+     * Get all users without invoices.
+     *
+     * @param $users
+     * @param $current_month
+     *
+     * @return array
+     */
+    public function getUsersWithoutInvoices($users, $current_month):array
+    {
+        $invoice = new Invoice();
+        $usuarios_por_facturar = [];
+        foreach ($users as $user) {
+            $mesActualYaFacturado = true;
+            $invoices = $invoice::where(['user_id' => $user->id, 'month_invoiced' => $current_month, 'concept' => 'MENSUALIDAD'])->get();
+            foreach ($invoices as $factura) {
+                $mesActualYaFacturado = $factura['month_invoiced'] !== $current_month;
+            }
+
+            if ($mesActualYaFacturado) {
+                $usuarios_por_facturar[] = $user;
+            }
+        }
+        return $usuarios_por_facturar;
     }
 
 }

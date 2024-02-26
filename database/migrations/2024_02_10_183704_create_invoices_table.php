@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('value');
             $table->string('description');
+            $table->string('year_invoiced')->nullable();
             $table->string('month_invoiced')->nullable();
             $table->string('concept');
             $table->string('status');
