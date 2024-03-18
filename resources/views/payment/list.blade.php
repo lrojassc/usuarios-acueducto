@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Listado de Pagos')
+@section('title', 'Pagos')
 
 @section('content')
     <div class="container">

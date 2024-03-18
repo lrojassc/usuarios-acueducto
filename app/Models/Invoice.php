@@ -76,6 +76,7 @@ class Invoice extends Model
                 'value' => $invoice['value'],
                 'description' => $invoice['description'],
                 'month_invoiced' => $invoice['month_invoiced'],
+                'year_invoiced' => $invoice['year_invoiced'],
                 'concept' => $invoice['concept'],
                 'status' => $invoice['status'],
             ];

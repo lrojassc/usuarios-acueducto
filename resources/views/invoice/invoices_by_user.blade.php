@@ -4,6 +4,8 @@
         <th scope="col">Seleccione</th>
         <th scope="col">No. Factura</th>
         <th scope="col">Valor</th>
+        <th scope="col">Año</th>
+        <th scope="col">Mes</th>
         <th scope="col">Descripción</th>
         <th scope="col">Estado</th>
         <th scope="col">Concepto</th>
@@ -16,6 +18,8 @@
             <td type="checkbox" class="form-check-input" ><input id="massivePayment" class="form-check-input" type="checkbox" onclick="obtenerValorCheckbox(this)"></td>
             <td>{{$invoice['id']}}</td>
             <td>{{$invoice['value']}}</td>
+            <td>{{$invoice['year_invoiced']}}</td>
+            <td>{{$invoice['month_invoiced']}}</td>
             <td>{{$invoice['description']}}</td>
             <td style="@if($invoice['status'] == 'PAGADA') color:green;
                 @elseif($invoice['status'] == 'PAGO PARCIAL') color: orange;

@@ -26,19 +26,19 @@
         <nav class="navegacion">
             <ul>
                 <li>
-                    <a id="inbox" href="{{ route('user.list') }}">
+                    <a class="option" href="{{ route('user.list') }}" onclick="marcarOpcion(this)">
                         <svg class="icon-menu" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 2a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2m0 7c2.67 0 8 1.33 8 4v3H4v-3c0-2.67 5.33-4 8-4m0 1.9c-2.97 0-6.1 1.46-6.1 2.1v1.1h12.2V17c0-.64-3.13-2.1-6.1-2.1"/></svg>
                         <span>Usuarios</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('user.create') }}">
+                    <a class="option" href="{{ route('user.create') }}" onclick="marcarOpcion(this)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="currentColor" d="M14 14.252v2.09A6 6 0 0 0 6 22H4a8 8 0 0 1 10-7.749M12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6s6 2.685 6 6s-2.685 6-6 6m0-2c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4m6 6v-3h2v3h3v2h-3v3h-2v-3h-3v-2z"/></svg>
                         <span>Crear Usuario</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('invoice.list') }}">
+                    <a class="option" href="{{ route('invoice.list') }}" onclick="marcarOpcion(this)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3h14v18l-1.032-.884a2 2 0 0 0-2.603 0L14.333 21l-1.031-.884a2 2 0 0 0-2.604 0L9.667 21l-1.032-.884a2 2 0 0 0-2.603 0L5 21zm10 4H9m6 4H9m6 4h-4"/></svg>
                         <span>Facturas</span>
                     </a>
@@ -84,4 +84,16 @@
         @yield('content')
     </main>
 </body>
+<script>
+    function marcarOpcion(opcionSeleccionada) {
+        // Elimina la clase 'activa' de todas las opciones
+        const opciones = document.querySelectorAll('.option');
+        opciones.forEach(opcion => {
+            opcion.classList.remove('activa');
+        });
+
+        // Agrega la clase 'activa' solo a la opción seleccionada
+        opcionSeleccionada.classList.add('activa');
+    }
+</script>
 </html>

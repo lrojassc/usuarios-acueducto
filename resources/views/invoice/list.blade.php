@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Listado de Facturas')
+@section('title', 'Facturas')
 
 @section('content')
     @if(session('error'))
@@ -19,6 +19,8 @@
             <tr>
                 <th scope="col">Factura</th>
                 <th scope="col">Valor</th>
+                <th scope="col">Año</th>
+                <th scope="col">Mes</th>
                 <th scope="col">Descripción</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Concepto</th>
@@ -31,6 +33,8 @@
                 <tr>
                     <td>{{$invoice->id}}</td>
                     <td>{{$invoice->value}}</td>
+                    <td>{{$invoice->year_invoiced}}</td>
+                    <td>{{$invoice->month_invoiced}}</td>
                     <td>{{$invoice->description}}</td>
                     <td>{{$invoice->status}}</td>
                     <td>{{$invoice->concept}}</td>

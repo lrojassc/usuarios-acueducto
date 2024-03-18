@@ -109,7 +109,7 @@ class InvoiceController extends Controller
                 $invoice = new Invoice();
 
                 $invoice->value = 10000;
-                $invoice->description = 'Servicio de agua mes - ' . $current_month;
+                $invoice->description = 'Servicio de agua mensual';
                 $invoice->year_invoiced = date('Y');
                 $invoice->month_invoiced = $current_month;
                 $invoice->concept = 'MENSUALIDAD';
@@ -160,7 +160,7 @@ class InvoiceController extends Controller
                 $invoice = new Invoice();
 
                 $invoice->value = 10000;
-                $invoice->description = 'Servicio de agua mes - ' . $month;
+                $invoice->description = 'Servicio de agua mensual';
                 $invoice->year_invoiced = $current_year;
                 $invoice->month_invoiced = $month;
                 $invoice->concept = 'MENSUALIDAD';
