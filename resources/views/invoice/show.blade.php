@@ -3,7 +3,11 @@
 @section('title', 'Factura ' . $invoice->id)
 
 @section('content')
-
+    @if(session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <div class="container">
         <div class="justify-content-center">
             <div class="card">
@@ -41,7 +45,6 @@
                             <div class="form-floating mb-3 mt-3 col">
                                 <input type="text" class="form-control" id="paymentStatus" name="paymentStatus" value="{{ $invoice->status }}" @if($invoice->value == '$0' and $invoice->status == 'PAGADA') disabled @endif >
                                 <label for="paymentStatus">Estado</label>
-                                @error('paymentValue') <p>{{ $message }}</p> @enderror
                             </div>
                         @else
                             <div class="form-floating mb-3 mt-3 col">

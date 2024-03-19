@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method static where(string $string, $user_id)
+ * @method static find($id)
  */
 class Invoice extends Model
 {
@@ -55,37 +56,4 @@ class Invoice extends Model
         );
     }
 
-    /**
-     * @param $user_id
-     *
-     * @return array
-     */
-    public function getInvoicesByUser($user_id): array
-    {
-        $payment = new Payment();
-        $invoices_by_user = Invoice::where('user_id', $user_id)->get();
-        $invoices = [];
-        $total_valor_pendiente = 0;
-        $total_pagos_realizados = 0;
-
-        foreach ($invoices_by_user as $key => $invoice) {
-            $value_invoice_pendiente = (int)str_replace(["$", "."], '', $invoice['value']);
-            $total_valor_pendiente += $value_invoice_pendiente;
-            $invoices[$key] = [
-                'id' => $invoice['id'],
-                'value' => $invoice['value'],
-                'description' => $invoice['description'],
-                'month_invoiced' => $invoice['month_invoiced'],
-                'concept' => $invoice['concept'],
-                'status' => $invoice['status'],
-            ];
-
-            $pago_realizado = $payment->getTotalPayment($invoice['id']);
-            $total_pagos_realizados += $pago_realizado;
-        }
-        $invoices['total_valor_pendiente'] = $total_valor_pendiente;
-        $invoices['total_pagos_realizados'] = $total_pagos_realizados;
-
-        return $invoices;
-    }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('title', 'Listado de Usuarios')
+@section('title', 'Usuarios')
 
 @section('content')
     @if(session('success'))

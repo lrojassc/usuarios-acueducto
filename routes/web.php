@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GeneratePdfController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
@@ -20,31 +21,33 @@ use App\Http\Controllers\UserController;
 Route::get('/', [HomeController::class, 'index'])->name('index');
 
 Route::controller(UserController::class)->group(function() {
-    Route::get('/admin/user/list', 'list')->name('user.list');
-
-    Route::get('/admin/user/create', 'create')->name('user.create');
-    Route::post('/admin/user/store', 'store')->name('user.store');
-
-    Route::get('/admin/user/show/{user}', 'show')->name('user.show');
-    Route::get('/admin/user/edit/{user}', 'edit')->name('user.edit');
-    Route::put('/admin/user/update/{user}', 'update')->name('user.update');
-
-    Route::post('/admin/user/import', 'import')->name('user.import');
+    $path_user = '/admin/user/';
+    Route::get($path_user . 'list', 'list')->name('user.list');
+    Route::get($path_user . 'create', 'create')->name('user.create');
+    Route::post($path_user . 'store', 'store')->name('user.store');
+    Route::get($path_user . 'show/{user}', 'show')->name('user.show');
+    Route::get($path_user . 'edit/{user}', 'edit')->name('user.edit');
+    Route::put($path_user . 'update/{user}', 'update')->name('user.update');
+    Route::post($path_user . 'import', 'import')->name('user.import');
 });
 
 Route::controller(InvoiceController::class)->group(function() {
-    Route::get('/admin/invoice/list', 'list')->name('invoice.list');
-
-    Route::get('/admin/invoice/create', 'create')->name('invoice.create');
-    Route::post('/admin/invoice/store', 'store')->name('invoice.store');
-
-    Route::get('/admin/invoice/show/{invoice}', 'show')->name('invoice.show');
-
-    Route::get('/admin/invoice/create-massive', 'createMassive')->name('invoice.create_massive');
+    $path_invoice = '/admin/invoice/';
+    Route::get($path_invoice . 'list', 'list')->name('invoice.list');
+    Route::get($path_invoice . 'create', 'create')->name('invoice.create');
+    Route::post($path_invoice . 'store', 'store')->name('invoice.store');
+    Route::get($path_invoice . 'show/{invoice}', 'show')->name('invoice.show');
+    Route::get($path_invoice . 'create-massive', 'createMassive')->name('invoice.create_massive');
+    Route::post($path_invoice . 'create-invoices-list-by-user/{user}', 'createInvoicesByUser')->name('invoice.create_invoice_by_user');
 });
 
 Route::controller(PaymentController::class)->group(function () {
-    Route::get('/admin/payment/list', 'list')->name('payment.list');
-    Route::get('/admin/payment/show/{payment}', 'show')->name('payment.show');
-    Route::put('/admin/invoice/payment/{invoice}', 'payment')->name('payment.invoice');
+    $path_payment = '/admin/payment';
+    Route::get($path_payment . 'list', 'list')->name('payment.list');
+    Route::get($path_payment . 'show/{payment}', 'show')->name('payment.show');
+    Route::put($path_payment . 'payment/{invoice}', 'payment')->name('payment.invoice');
+});
+
+Route::controller(GeneratePdfController::class)->group(function () {
+   Route::get('/admin/pdf', 'getPdf')->name('pdf');
 });
