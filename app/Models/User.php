@@ -26,6 +26,16 @@ class User extends Model
         return $this->hasMany('App\Models\Invoice');
     }
 
+    /**
+     * Relación uno a muchos
+     *
+     * @return HasMany
+     */
+    public function services(): HasMany
+    {
+        return $this->hasMany('App\Models\Subscription');
+    }
+
     protected function name(): Attribute
     {
         return Attribute::make(
@@ -58,5 +68,10 @@ class User extends Model
 
     public function id(): string {
         return $this->id;
+    }
+
+    public function getLastUser()
+    {
+        return User::all()->last();
     }
 }

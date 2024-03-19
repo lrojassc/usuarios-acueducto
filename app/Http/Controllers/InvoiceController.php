@@ -106,17 +106,20 @@ class InvoiceController extends Controller
         $users_without_invoices = $this->getUsersWithoutInvoices($users, $current_month);
         if ($last_month_massive_invoice === NULL || $last_month_massive_invoice != $current_month) {
             foreach ($users_without_invoices as $user) {
-                $invoice = new Invoice();
+                $active_services = $user->active_services;
+                for ($i = 1; $i <= $active_services; $i++) {
+                    $invoice = new Invoice();
 
-                $invoice->value = 10000;
-                $invoice->description = 'Servicio de agua mensual';
-                $invoice->year_invoiced = date('Y');
-                $invoice->month_invoiced = $current_month;
-                $invoice->concept = 'MENSUALIDAD';
-                $invoice->status = 'PENDIENTE';
-                $invoice->user_id = $user->id;
+                    $invoice->value = 10000;
+                    $invoice->description = 'Servicio de agua mensual apartamento ' . $i;
+                    $invoice->year_invoiced = date('Y');
+                    $invoice->month_invoiced = $current_month;
+                    $invoice->concept = 'MENSUALIDAD';
+                    $invoice->status = 'PENDIENTE';
+                    $invoice->user_id = $user->id;
 
-                $invoice->save();
+                    $invoice->save();
+                }
             }
 
             $massive_invoice->year = date('Y');
@@ -132,8 +135,9 @@ class InvoiceController extends Controller
 
     public function show(Invoice $invoice, Payment $payment)
     {
-        $payments = $payment->getPaymentsByInvoiceId($invoice->id);
-        $payment_total = '$' . number_format(num: $payment->getTotalPayment($invoice->id), thousands_separator: '.') ?? '$0';
+        $payments = $invoice::find($invoice->id)->payments;
+        $pago_realizado = $payment->getTotalPayment($payments);
+        $payment_total = '$' . number_format(num: $pago_realizado, thousands_separator: '.') ?? '$0';
 
         return view('invoice.show', compact('invoice', 'payments', 'payment_total'));
     }

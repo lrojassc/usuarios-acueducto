@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('old_code')->unique();
+            $table->string('paid_subscription');
             $table->string('address');
             $table->string('city');
             $table->string('municipality');

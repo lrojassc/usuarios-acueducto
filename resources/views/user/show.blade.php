@@ -63,8 +63,24 @@
                                 <label for="editUserOldCode">Código Antiguo de Suscripción</label>
                             </div>
                         </div>
+
+                        <!-- Sección de servicios activos por usuario -->
+                        <div class="card">
+                            <div class="card-header">Servicios Activos</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    @foreach($services as $service)
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="editActiveServices" name="editActiveServices" value="{{ $service->service }}" @if($mode == 'show') disabled @endif>
+                                            <label for="editActiveServices">Descripción del Servicio</label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
                         @if($mode == 'edit')
-                            <button id="btn-guardar_usuario" type="submit" class="btn btn-outline-secondary">Guardar</button>
+                            <button id="btn-guardar_usuario" type="submit" class="btn btn-outline-secondary mt-3">Guardar</button>
                         @endif
 
                     </form>
