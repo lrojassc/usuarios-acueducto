@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Payment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -44,6 +45,15 @@ class PaymentController extends Controller
                 $payment->invoice_id = $invoice->id;
 
                 $payment->save();
+
+                // Si paga completamente la factura de la suscripcion su estado pasa a PAGADA
+                if ($status_invoice === 'PAGADA') {
+                    $user = new User();
+                    $invoice_user = $invoice::find($invoice->id)->user_id;
+                    $data_user = $user::find($invoice_user['id']);
+                    $data_user->paid_subscription = $status_invoice;
+                    $data_user->save();
+                }
             }
             return redirect()->route('invoice.list');
         } else {

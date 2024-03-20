@@ -64,18 +64,26 @@
                             </div>
                         </div>
 
-                        <!-- Sección de servicios activos por usuario -->
+                        <!-- Sección de servicios activos por usuario o para registrar-->
                         <div class="card">
-                            <div class="card-header">Servicios Activos</div>
+                            @if($mode == 'show')
+                                <div class="card-header">{{ $subscription_status }} y cuenta con los siguientes servicios activos.</div>
+                            @else
+                                <div class="card-header">Servicios activos o por registrar.</div>
+                            @endif
+
                             <div class="card-body">
-                                <div class="row">
-                                    @foreach($services as $service)
+                                <div class="row" id="containerNewServices">
+                                    @foreach($services_by_user as $key => $service)
                                         <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="editActiveServices" name="editActiveServices" value="{{ $service->service }}" @if($mode == 'show') disabled @endif>
-                                            <label for="editActiveServices">Descripción del Servicio</label>
+                                            <input type="text" class="form-control" id="editActiveServices{{$key + 1}}" name="editActiveServices{{$key + 1}}" value="{{ $service->service }}" @if($mode == 'show') disabled @endif>
+                                            <label for="editActiveServices{{$key + 1}}">Descripción del Servicio {{ $key + 1 }}</label>
                                         </div>
                                     @endforeach
                                 </div>
+                                @if($mode == 'edit')
+                                    <button type="button" class="btn btn-outline-secondary" onclick="addNewService()">Nuevo Servicio</button>
+                                @endif
                             </div>
                         </div>
 
@@ -97,3 +105,38 @@
         </div>
     @endif
 @endsection
+<script>
+    function addNewService() {
+        // Crear nuevo elemento input y label
+        var nuevoDiv = document.createElement("div");
+        var nuevoInput = document.createElement("input");
+        var nuevoLabel = document.createElement("label");
+
+        var containerServices = document.getElementById("containerNewServices");
+        var inputElements = containerServices.querySelectorAll("input");
+        var countInputs = inputElements.length;
+        var counter = countInputs + 1;
+
+        if (counter > 5) {
+            alert('No es posible agregar mas servicios')
+        } else {
+            nuevoInput.type = "text";
+            nuevoInput.classList = "form-control mb-3";
+            nuevoInput.name = "nuevoServicio" + counter;
+
+            nuevoDiv.classList = "form-floating";
+
+            nuevoLabel.textContent = "Descripción del Nuevo Servicio " + counter;
+
+            nuevoDiv.appendChild(nuevoInput);
+            nuevoDiv.appendChild(nuevoLabel);
+
+            // Obtener el contenedor donde se agregarán los inputs
+            var contenedorInputs = document.getElementById("containerNewServices");
+
+            // Agregar el nuevo input al contenedor
+            contenedorInputs.appendChild(nuevoDiv);
+        }
+
+    }
+</script>

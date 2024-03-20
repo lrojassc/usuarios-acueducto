@@ -101,31 +101,41 @@ class UserController extends Controller
         return redirect()->route('user.list');
     }
 
+    /**
+     * Ver información de usuario para poder actualizar
+     *
+     * @param User $user
+     *
+     */
     public function edit(User $user) {
-        return view('user.show', ['mode' => 'edit'], compact('user'));
+        $services_by_user = $user::find($user->id())->services;
+        return view('user.show', ['mode' => 'edit'], compact('user', 'services_by_user'));
     }
 
     /**
      * Ver información detallada del usuario
      *
      * @param User $user
-     * @param Invoice $invoice
      *
      */
-    public function show(User $user, Invoice $invoice) {
+    public function show(User $user) {
         $invoices_by_user = User::find($user->id())->invoices;
         $services_by_user = User::find($user->id())->services;
         $total_invoices = $this->getTotalInvoices($invoices_by_user);
         $total_facturas = $total_invoices['total_valor_pendiente'] + $total_invoices['total_pagos_realizados'];
+        $subscription_status = $user->paid_subscription === 'PAGADA'
+            ? 'Esta suscripción se encuentra PAGADA completamente'
+            : 'Esta suscripción aún NO SE HA PAGADO completamente';
 
         return view('user.show', [
             'mode' => 'show',
             'user' => $user,
             'invoices' => $invoices_by_user,
-            'services' => $services_by_user,
+            'services_by_user' => $services_by_user,
             'total_invoices' => '$' . number_format(num: $total_invoices['total_valor_pendiente'], thousands_separator: '.'),
             'total_pagos_realizados' => '$' . number_format(num: $total_invoices['total_pagos_realizados'], thousands_separator: '.'),
-            'total_facturas' => '$' . number_format(num: $total_facturas, thousands_separator: '.')
+            'total_facturas' => '$' . number_format(num: $total_facturas, thousands_separator: '.'),
+            'subscription_status' => $subscription_status
         ]);
     }
 
@@ -139,20 +149,41 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
+        // Obtener cantidad de servicios por actualizar y servicios por agregar
+        $update_services = $this->getServicesByUser($request, 'editActiveServices');
+        $new_services = $this->getServicesByUser($request, 'nuevoServicio');
+
         $request->validate([
             'editUserName' => ['required', 'string'],
             'editUserPhoneNumber' => ['required', 'numeric'],
             'editUserAddress' => ['required', 'string']
         ]);
 
+
         $user->name = $request->editUserName;
         $user->email = $request->editUserEmail;
         $user->phone_number = $request->editUserPhoneNumber;
         $user->address = $request->editUserAddress;
         $user->old_code = $request->editUserOldCode;
-        $user->active_services = $request->editActiveServices;
 
-        $user->save();
+        // Agregar o actualizar servicios del usuario
+        if ($user->save()) {
+            $subscription = new Subscription();
+            $subscriptions_by_user = $user::find($user->id)->services;
+            $count = 0;
+            foreach ($update_services as $update_service) {
+                $subscriptions_by_user[$count]->service = $update_service;
+                $subscriptions_by_user[$count]->save();
+                $count++;
+            }
+
+            foreach ($new_services as $new_service) {
+                $subscription->service = $new_service;
+                $subscription->user_id = $user->id;
+                $subscription->save();
+            }
+
+        }
 
         return redirect()->route('user.list');
     }
@@ -198,5 +229,25 @@ class UserController extends Controller
         $total_invoices['total_pagos_realizados'] = $total_pagos_realizados;
 
         return $total_invoices;
+    }
+
+    /**
+     * Obtener los servicios activos o para crear
+     *
+     * @param $request
+     * @param $search
+     *
+     * @return array
+     */
+    public function getServicesByUser($request, $search): array
+    {
+        $services = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $services['service_'.$i] = $request->{$search.$i};
+            if ($services['service_'.$i] === NULL) {
+                unset($services['service_'.$i]);
+            }
+        }
+        return $services;
     }
 }
