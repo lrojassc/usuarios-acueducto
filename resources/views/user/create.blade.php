@@ -18,8 +18,8 @@
                             </div>
                             <div class="form-floating mb-3 mt-3 col-4">
                                 <select class="form-select" id="userDocumentType" name="userDocumentType">
-                                    <option selected value="CEDULA DE CIUDADANIA">CEDULA DE CIUDADANIA</option>
-                                    <option value="TARJETA DE IDENTIDAD">TARJETA DE IDENTIDAD</option>
+                                    <option selected value="CC">CEDULA DE CIUDADANIA</option>
+                                    <option value="TI">TARJETA DE IDENTIDAD</option>
                                     <option value="NIT">NIT</option>
                                 </select>
                                 <label for="userDocumentType">Tipo de documento</label>

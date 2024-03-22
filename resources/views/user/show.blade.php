@@ -65,7 +65,8 @@
                         </div>
 
                         <!-- Sección de servicios activos por usuario o para registrar-->
-                        <div class="card">
+                        <hr>
+                        <div class="card col-md-8 offset-2">
                             @if($mode == 'show')
                                 <div class="card-header">{{ $subscription_status }} y cuenta con los siguientes servicios activos.</div>
                             @else
@@ -75,10 +76,18 @@
                             <div class="card-body">
                                 <div class="row" id="containerNewServices">
                                     @foreach($services_by_user as $key => $service)
-                                        <div class="form-floating mb-3">
-                                            <input type="text" class="form-control" id="editActiveServices{{$key + 1}}" name="editActiveServices{{$key + 1}}" value="{{ $service->service }}" @if($mode == 'show') disabled @endif>
-                                            <label for="editActiveServices{{$key + 1}}">Descripción del Servicio {{ $key + 1 }}</label>
-                                        </div>
+                                        @if($service->status == 'ACTIVO')
+                                            <div class="input-group mb-3">
+                                                <input type="text" class="form-control" id="editActiveServices{{$key + 1}}" name="editActiveServices{{$key + 1}}"
+                                                       value="{{ $service->service }}" @if($mode == 'show') disabled @endif
+                                                >
+
+                                                <!-- Visualizar boton de eliminar servicio-->
+                                                @if($mode == 'edit')
+                                                    <button type="button" class="btn btn-outline-secondary" id="editActiveServices{{$key + 1}}" onclick="deleteService({{$service}})">Eliminar</button>
+                                                @endif
+                                            </div>
+                                        @endif
                                     @endforeach
                                 </div>
                                 @if($mode == 'edit')
@@ -88,6 +97,7 @@
                         </div>
 
                         @if($mode == 'edit')
+                            <hr>
                             <button id="btn-guardar_usuario" type="submit" class="btn btn-outline-secondary mt-3">Guardar</button>
                         @endif
 
@@ -138,5 +148,28 @@
             contenedorInputs.appendChild(nuevoDiv);
         }
 
+    }
+
+    function deleteService(service) {
+        event.preventDefault();
+
+        fetch('{{ route("service.delete") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify(service)
+        })
+        .then(response => {
+            console.log(response)
+            if(response.ok === true) {
+                alert('Servicio eliminado')
+                window.location.href = window.location.href;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 </script>

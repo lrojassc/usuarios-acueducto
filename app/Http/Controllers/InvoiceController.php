@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\MassiveInvoice;
 use App\Models\Payment;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -106,12 +107,11 @@ class InvoiceController extends Controller
         $users_without_invoices = $this->getUsersWithoutInvoices($users, $current_month);
         if ($last_month_massive_invoice === NULL || $last_month_massive_invoice != $current_month) {
             foreach ($users_without_invoices as $user) {
-                $active_services = $user->active_services;
-                for ($i = 1; $i <= $active_services; $i++) {
+                $services_by_user = $user->services;
+                foreach ($services_by_user as $service) {
                     $invoice = new Invoice();
-
                     $invoice->value = 10000;
-                    $invoice->description = 'Servicio de agua mensual apartamento ' . $i;
+                    $invoice->description = 'Servicio acueducto ' . $service->service;
                     $invoice->year_invoiced = date('Y');
                     $invoice->month_invoiced = $current_month;
                     $invoice->concept = 'MENSUALIDAD';

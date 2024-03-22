@@ -168,19 +168,25 @@ class UserController extends Controller
 
         // Agregar o actualizar servicios del usuario
         if ($user->save()) {
-            $subscription = new Subscription();
             $subscriptions_by_user = $user::find($user->id)->services;
             $count = 0;
             foreach ($update_services as $update_service) {
-                $subscriptions_by_user[$count]->service = $update_service;
-                $subscriptions_by_user[$count]->save();
+                if (!empty($update_service)) {
+                    $subscriptions_by_user[$count]->service = $update_service;
+                    $subscriptions_by_user[$count]->status = 'ACTIVO';
+                    $subscriptions_by_user[$count]->save();
+                }
                 $count++;
             }
 
             foreach ($new_services as $new_service) {
-                $subscription->service = $new_service;
-                $subscription->user_id = $user->id;
-                $subscription->save();
+                if (!empty($new_service)) {
+                    $new_subscription = new Subscription();
+                    $new_subscription->service = $new_service;
+                    $new_subscription->user_id = $user->id;
+                    $new_subscription->status = 'ACTIVO';
+                    $new_subscription->save();
+                }
             }
 
         }

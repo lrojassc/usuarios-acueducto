@@ -4,6 +4,7 @@ use App\Http\Controllers\GeneratePdfController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -46,6 +47,11 @@ Route::controller(PaymentController::class)->group(function () {
     Route::get($path_payment . 'list', 'list')->name('payment.list');
     Route::get($path_payment . 'show/{payment}', 'show')->name('payment.show');
     Route::put($path_payment . 'payment/{invoice}', 'payment')->name('payment.invoice');
+});
+
+Route::controller(SubscriptionController::class)->group(function () {
+   $subscription_path = '/admin/service/';
+   Route::post($subscription_path . 'delete', 'delete')->name('service.delete');
 });
 
 Route::controller(GeneratePdfController::class)->group(function () {
