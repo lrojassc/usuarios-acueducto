@@ -37,6 +37,16 @@ class Invoice extends Model
     }
 
     /**
+     * Relación uno a muchos (inversa) con subscription
+     *
+     * @return BelongsTo
+     */
+    public function subscription(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\Subscription');
+    }
+
+    /**
      * @return Attribute
      */
     protected function value(): Attribute

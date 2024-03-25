@@ -55,5 +55,5 @@ Route::controller(SubscriptionController::class)->group(function () {
 });
 
 Route::controller(GeneratePdfController::class)->group(function () {
-   Route::get('/admin/pdf', 'getPdf')->name('pdf');
+   Route::get('/admin/generate-massive-invoice-pdf', 'generateMassiveInvoicePdf')->name('massive_invoice.pdf');
 });

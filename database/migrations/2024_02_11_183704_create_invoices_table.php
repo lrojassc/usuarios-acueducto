@@ -20,9 +20,13 @@ return new class extends Migration
             $table->string('concept');
             $table->string('status');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('subscription_id');
 
             $table->foreign('user_id')
                 ->references('id')->on('users');
+
+            $table->foreign('subscription_id')
+                ->references('id')->on('subscriptions');
 
             $table->timestamps();
         });

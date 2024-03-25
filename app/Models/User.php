@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static paginate()
  * @method static find($id)
  * @method static orderBy(string $string, string $string1)
+ * @method static where(string $string, string $string1)
  */
 class User extends Model
 {
@@ -68,10 +69,5 @@ class User extends Model
 
     public function id(): string {
         return $this->id;
-    }
-
-    public function getLastUser()
-    {
-        return User::all()->last();
     }
 }

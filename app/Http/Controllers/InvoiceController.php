@@ -117,6 +117,7 @@ class InvoiceController extends Controller
                     $invoice->concept = 'MENSUALIDAD';
                     $invoice->status = 'PENDIENTE';
                     $invoice->user_id = $user->id;
+                    $invoice->subscription_id = $service->id;
 
                     $invoice->save();
                 }

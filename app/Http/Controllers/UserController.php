@@ -83,9 +83,11 @@ class UserController extends Controller
             $subscription = new Subscription();
             $user_id = $user::all()->last()->id;
             $subscription->service = 'Residencial 1';
+            $subscription->status = 'ACTIVO';
             $subscription->user_id = $user_id;
 
             if ($subscription->save()) {
+                $subscription_id = $subscription::all()->last()->id;
                 $invoice = new Invoice();
                 $invoice->value = $this->value_subscription;
                 $invoice->description = 'Suscripción al servicio de acueducto';
@@ -94,6 +96,7 @@ class UserController extends Controller
                 $invoice->concept = 'SUSCRIPCION';
                 $invoice->status = 'PENDIENTE';
                 $invoice->user_id = $user_id;
+                $invoice->subscription_id = $subscription_id;
                 $invoice->save();
             }
         }
