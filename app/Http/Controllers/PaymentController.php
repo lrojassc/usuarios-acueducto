@@ -26,8 +26,22 @@ class PaymentController extends Controller
         return view('payment.list', compact('payments'));
     }
 
+    /**
+     * Mostrar información del pago realizado
+     *
+     * @param Payment $payment
+     */
     public function show(Payment $payment)
     {
+        $invoice = $payment->invoice;
+        $user = User::find($invoice->user_id)[0];
+        $subscription = $invoice->subscription;
+
+        $payment->setAttribute('format_value', '$' . number_format(num: $payment->value, thousands_separator: '.'));
+        $payment->setAttribute('invoice', $invoice);
+        $payment->setAttribute('user', $user);
+        $payment->setAttribute('subscription', $subscription);
+
         return view('payment.show', compact('payment'));
     }
 

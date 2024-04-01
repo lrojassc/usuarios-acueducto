@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
@@ -55,6 +56,31 @@ class GeneratePdfController extends UserController
 
         $pdf = PDF::loadView('pdf.payment', compact('imprimir_invoices'));
         $pdf->setPaper('A4');
+        return $pdf->stream('prueba.pdf');
+    }
+
+    /**
+     * Generar informe de pago realizado
+     *
+     * @param Payment $payment
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function generateStatusPayment(Payment $payment)
+    {
+        $invoice = $payment->invoice;
+        $user = User::find($invoice->user_id)[0];
+        $subscription = $invoice->subscription;
+
+        $pdf = PDF::loadView('pdf.status_payment',
+            [
+                'payment' => $payment,
+                'invoice' => $invoice,
+                'user' => $user,
+                'subscription' => $subscription,
+                'format_value' => '$' . number_format(num: $payment->value, thousands_separator: '.')
+            ]);
+        $pdf->setPaper([0,0,530,400]);
         return $pdf->stream('prueba.pdf');
     }
 

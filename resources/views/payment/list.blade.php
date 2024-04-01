@@ -33,7 +33,7 @@
                     <td>{{$payment->user->name}}</td>
                     <td>{{$payment->subscription->service}}</td>
                     <td>{{$payment->created_at}}</td>
-                    <td><a href="{{ route('payment.show', $payment->id) }}">VER</a></td>
+                    <td><a href="{{ route('payment.show', $payment) }}">VER</a></td>
                 </tr>
             @endforeach
             </tbody>

@@ -58,4 +58,5 @@ Route::controller(SubscriptionController::class)->group(function () {
 Route::controller(GeneratePdfController::class)->group(function () {
    Route::get('/admin/generate-massive-invoice-pdf', 'generateMassiveInvoicePdf')->name('massive_invoice.pdf');
    Route::get('/admin/generate-account-status-by-user-pdf/{user}', 'generateAccountStatusByUser')->name('pdf.account_status_by_user');
+   Route::post('/admin/generate-status-payment/{payment}', 'generateStatusPayment')->name('pdf.status_payment');
 });
