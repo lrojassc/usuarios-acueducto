@@ -13,6 +13,16 @@ class PaymentController extends Controller
     public function list()
     {
         $payments = Payment::all();
+        foreach ($payments as $key => $payment) {
+            $invoice = $payment->invoice;
+            $user = User::find($invoice->user_id)[0];
+            $subscription = $invoice->subscription;
+
+            $payments[$key]->setAttribute('format_value', '$' . number_format(num: $payment->value, thousands_separator: '.'));
+            $payments[$key]->setAttribute('invoice', $invoice);
+            $payments[$key]->setAttribute('user', $user);
+            $payments[$key]->setAttribute('subscription', $subscription);
+        }
         return view('payment.list', compact('payments'));
     }
 
@@ -21,6 +31,14 @@ class PaymentController extends Controller
         return view('payment.show', compact('payment'));
     }
 
+    /**
+     * Pagos realizados
+     *
+     * @param Request $request
+     * @param Invoice $invoice
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function payment(Request $request, Invoice $invoice)
     {
         $value_invoice = str_replace(["$", "."], '', $invoice->value);

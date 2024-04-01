@@ -107,6 +107,13 @@
             @if($mode == 'show')
                 @include('invoice.modal_facturas')
             @endif
+
+            <!--Enlace para generar estado de cuenta por usuario-->
+            <ul class="nav nav-underline">
+                <li class="nav-item">
+                    <a class="nav-link mb-2 fs-5" type="button" aria-current="page" href="{{ route('pdf.account_status_by_user', $user) }}">Estado de Cuenta Suscriptor</a>
+                </li>
+            </ul>
         </div>
     </div>
     @if($mode == 'show')

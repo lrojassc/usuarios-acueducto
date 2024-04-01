@@ -76,11 +76,13 @@ class InvoiceController extends Controller
 
         $invoice = new Invoice();
         $invoice->value = $request->valueInvoice;
+        $invoice->year_invoiced = date('Y');
         $invoice->month_invoiced = $request->monthInvoice;
         $invoice->description = $request->descriptionInvoice;
         $invoice->status = 'PENDIENTE';
         $invoice->concept = $request->conceptInvoice;
         $invoice->user_id = $request->userInvoice;
+        $invoice->subscription_id = $request->serviceUser;
 
         $invoice->save();
 

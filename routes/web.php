@@ -52,8 +52,10 @@ Route::controller(PaymentController::class)->group(function () {
 Route::controller(SubscriptionController::class)->group(function () {
    $subscription_path = '/admin/service/';
    Route::post($subscription_path . 'delete', 'delete')->name('service.delete');
+   Route::get($subscription_path . '{userId}/services', 'getServicesByUser');
 });
 
 Route::controller(GeneratePdfController::class)->group(function () {
    Route::get('/admin/generate-massive-invoice-pdf', 'generateMassiveInvoicePdf')->name('massive_invoice.pdf');
+   Route::get('/admin/generate-account-status-by-user-pdf/{user}', 'generateAccountStatusByUser')->name('pdf.account_status_by_user');
 });

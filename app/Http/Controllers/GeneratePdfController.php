@@ -8,7 +8,7 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Http\Request;
 
-class GeneratePdfController extends Controller
+class GeneratePdfController extends UserController
 {
     public function generateMassiveInvoicePdf(): \Illuminate\Http\Response
     {
@@ -54,6 +54,28 @@ class GeneratePdfController extends Controller
         }
 
         $pdf = PDF::loadView('pdf.payment', compact('imprimir_invoices'));
+        $pdf->setPaper('A4');
+        return $pdf->stream('prueba.pdf');
+    }
+
+    public function generateAccountStatusByUser(User $user): \Illuminate\Http\Response
+    {
+        $invoices_by_user = User::find($user->id())->invoices;
+        $total_invoices = $this->getTotalInvoices($invoices_by_user);
+
+        // Agregar descripcion del servicio
+        foreach ($invoices_by_user as $key => $invoice) {
+            $invoices_by_user[$key]->setAttribute('service_description', $invoice->subscription->service);
+        }
+
+        $pdf = PDF::loadView('pdf.account_status_by_user',
+            [
+                'user' => $user,
+                'info_total_invoices' => $total_invoices,
+                'invoices' => $invoices_by_user
+            ]
+        );
+
         $pdf->setPaper('A4');
         return $pdf->stream('prueba.pdf');
     }

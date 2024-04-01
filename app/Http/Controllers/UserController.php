@@ -125,7 +125,6 @@ class UserController extends Controller
         $invoices_by_user = User::find($user->id())->invoices;
         $services_by_user = User::find($user->id())->services;
         $total_invoices = $this->getTotalInvoices($invoices_by_user);
-        $total_facturas = $total_invoices['total_valor_pendiente'] + $total_invoices['total_pagos_realizados'];
         $subscription_status = $user->paid_subscription === 'PAGADA'
             ? 'Esta suscripción se encuentra PAGADA completamente'
             : 'Esta suscripción aún NO SE HA PAGADO completamente';
@@ -135,9 +134,9 @@ class UserController extends Controller
             'user' => $user,
             'invoices' => $invoices_by_user,
             'services_by_user' => $services_by_user,
-            'total_invoices' => '$' . number_format(num: $total_invoices['total_valor_pendiente'], thousands_separator: '.'),
-            'total_pagos_realizados' => '$' . number_format(num: $total_invoices['total_pagos_realizados'], thousands_separator: '.'),
-            'total_facturas' => '$' . number_format(num: $total_facturas, thousands_separator: '.'),
+            'total_invoices' => $total_invoices['total_valor_pendiente'],
+            'total_pagos_realizados' => $total_invoices['total_pagos_realizados'],
+            'total_facturas' => $total_invoices['total_facturas'],
             'subscription_status' => $subscription_status
         ]);
     }
@@ -234,10 +233,12 @@ class UserController extends Controller
             $total_pagos_realizados += $pago_realizado;
         }
 
-        $total_invoices['total_valor_pendiente'] = $total_valor_pendiente;
-        $total_invoices['total_pagos_realizados'] = $total_pagos_realizados;
-
-        return $total_invoices;
+        $total_facturas = $total_valor_pendiente + $total_pagos_realizados;
+        return [
+            'total_valor_pendiente' => '$' . number_format(num: $total_valor_pendiente, thousands_separator: '.'),
+            'total_pagos_realizados' => '$' . number_format(num: $total_pagos_realizados, thousands_separator: '.'),
+            'total_facturas' => '$' . number_format(num: $total_facturas, thousands_separator: '.'),
+        ];
     }
 
     /**

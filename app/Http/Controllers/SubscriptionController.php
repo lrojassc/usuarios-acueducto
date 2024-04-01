@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class SubscriptionController extends Controller
@@ -22,5 +23,16 @@ class SubscriptionController extends Controller
         $service->status = 'INACTIVO';
         $service->save();
         return response()->json(['success' => 'Servicio eliminado']);
+    }
+
+    /**
+     * @param $user_id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getServicesByUser($user_id): \Illuminate\Http\JsonResponse
+    {
+        $services_by_user = User::find($user_id)->services;
+        return response()->json(['services' => $services_by_user]);
     }
 }
