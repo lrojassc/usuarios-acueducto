@@ -63,33 +63,37 @@
                 fetch('/admin/service/' + userId + '/services')
                     .then(response => response.json())
                     .then(data => {
-                        // Inicializar el contenedor principal en limpio para el select
-                        var opcionesDiv = document.getElementById('serviceOptions');
-                        opcionesDiv.innerHTML = '';
+                        if (data.services.length === 0) {
+                            alert('El suscriptor no tiene servicios asociados, debe agregar al menos un servicio')
+                        } else {
+                            // Inicializar el contenedor principal en limpio para el select
+                            var opcionesDiv = document.getElementById('serviceOptions');
+                            opcionesDiv.innerHTML = '';
 
-                        // Crear los elementos html necesarios para mostrar las opciones
-                        var select = document.createElement("select");
-                        var label = document.createElement("label");
+                            // Crear los elementos html necesarios para mostrar las opciones
+                            var select = document.createElement("select");
+                            var label = document.createElement("label");
 
-                        // Agregar propiedades necesarias para los elementos html creados
-                        select.classList = "form-select";
-                        select.id = "serviceUser";
-                        select.name = "serviceUser";
-                        label.textContent = "Servicios";
+                            // Agregar propiedades necesarias para los elementos html creados
+                            select.classList = "form-select";
+                            select.id = "serviceUser";
+                            select.name = "serviceUser";
+                            label.textContent = "Servicios";
 
-                        // Incorporar los elementos creados al contenedor principal
-                        opcionesDiv.appendChild(select);
-                        opcionesDiv.appendChild(label);
-                        opcionesDiv.style.display = 'block';
+                            // Incorporar los elementos creados al contenedor principal
+                            opcionesDiv.appendChild(select);
+                            opcionesDiv.appendChild(label);
+                            opcionesDiv.style.display = 'block';
 
-                        // Inicializar el contenedor de las opciones disponibles
-                        var opcionesSelect = document.getElementById('serviceUser');
-                        opcionesSelect.innerHTML = '';
+                            // Inicializar el contenedor de las opciones disponibles
+                            var opcionesSelect = document.getElementById('serviceUser');
+                            opcionesSelect.innerHTML = '';
 
-                        // Agregar las opciones disponibles con innerHtml
-                        data.services.forEach(function (service) {
-                            opcionesSelect.innerHTML += '<option value=' + service.id +'>'+ service.service +'</option>';
-                        });
+                            // Agregar las opciones disponibles con innerHtml
+                            data.services.forEach(function (service) {
+                                opcionesSelect.innerHTML += '<option value=' + service.id +'>'+ service.service +'</option>';
+                            });
+                        }
                     })
             } else {
                 document.getElementById('serviceOptions').style.display = 'none';

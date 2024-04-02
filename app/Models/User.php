@@ -55,9 +55,10 @@ class User extends Model
      */
     public function getDocumentAndName(): array
     {
-        $data_user = [];
+        $user_model = new User();
+        $users = $user_model::where('status', 'ACTIVO')->get();
 
-        $users = User::all();
+        $data_user = [];
         foreach ($users as $user) {
             $data_user[] = [
                 'id' => $user->id,
