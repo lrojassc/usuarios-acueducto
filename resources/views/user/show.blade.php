@@ -59,8 +59,11 @@
                                 <label for="editUserMunicipality">Municipio</label>
                             </div>
                             <div class="form-floating mb-3 mt-3 col-4">
-                                <input type="text" class="form-control" id="editUserOldCode" name="editUserOldCode" value="{{ $user->old_code }}" @if($mode == 'show') disabled @endif>
-                                <label for="editUserOldCode">Código Antiguo de Suscripción</label>
+                                <select class="form-select" id="statusUser" name="statusUser" @if($mode == 'show') disabled @endif>>
+                                    <option selected value="{{ $user->status }}">{{ $user->status }}</option>
+                                    <option value="SUSPENDIDO">SUSPENDIDO</option>
+                                </select>
+                                <label for="statusUser">Estado del Suscriptor</label>
                             </div>
                         </div>
 

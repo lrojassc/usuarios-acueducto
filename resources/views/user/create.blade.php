@@ -59,9 +59,11 @@
                                 @error('userMunicipality') <p>{{ $message }}</p> @enderror
                             </div>
                             <div class="form-floating mb-3 col-4">
-                                <input type="text" class="form-control" id="userOldCode" name="userOldCode" value="{{ old('userOldCode') }}">
-                                <label for="userOldCode">Código Antiguo de Suscripción</label>
-                                @error('userOldCode') <p>{{ $message }}</p> @enderror
+                                <select class="form-select" id="userStatus" name="userStatus">
+                                    <option selected value="ACTIVO">ACTIVO</option>
+                                    <option value="SUSPENDIDO">SUSPENDIDO</option>
+                                </select>
+                                <label for="userStatus">Estado Para el Suscriptor</label>
                             </div>
                         </div>
                         <button id="btn-guardar_usuario" type="submit" class="btn btn-outline-secondary">Guardar</button>

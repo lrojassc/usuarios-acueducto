@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class GeneratePdfController extends UserController
 {
+
+    /**
+     * Generar facturas a cobrar por mes actual con deuda si tiene
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function generateMassiveInvoicePdf(): \Illuminate\Http\Response
     {
         $user_model = new User();
@@ -40,15 +46,20 @@ class GeneratePdfController extends UserController
                 }
 
                 $facturas_pendientes = $count_invoice_active - 1;
-                $descripcion_facturas_pendientes = $facturas_pendientes >= 1 ? 'SALDO PENDIENTE' : '';
-                $imprimir_invoices[$key_user][$key_service] = [
+                $observacion = $facturas_pendientes >= 1 ? 'Por favor realice el pago de forma inmediata'
+                    : 'Felicitaciones usted se encuentra al día';
+
+                $imprimir_invoices[] = [
                     'usuario' => $user->name,
-                    'valor_total_facturas' => $suma_total_facturas,
-                    'facturas_pendientes' => $facturas_pendientes,
-                    'valor_ultima_factura' => $value_last_invoice,
+                    'direccion' => $user->address . ' - ' . $user->city,
+                    'codigo' => $user->id,
+                    'servicio' => $service->service,
+                    'valor_total_facturas' => '$' . number_format(num: $suma_total_facturas, thousands_separator: '.'),
+                    'atrasos' => $facturas_pendientes,
+                    'valor_ultima_factura' => '$' . number_format(num: $value_last_invoice, thousands_separator: '.'),
                     'descripcion_ultima_factura' => $descripcion_ultima_factura,
-                    'descripcion_facturas_pendientes' => $descripcion_facturas_pendientes,
-                    'mes_facturado' => $mes_facturado
+                    'observacion' => $observacion,
+                    'periodo' => $mes_facturado
                 ];
             }
 

@@ -96,7 +96,8 @@ class InvoiceController extends Controller
      */
     public function createMassive(): RedirectResponse
     {
-        $users = User::all();
+        $user_model = new User();
+        $users = $user_model::where('status', 'ACTIVO')->get();
         $massive_invoice = new MassiveInvoice();
 
         $current_month = $this->monthsNumber[date('m')];

@@ -22,7 +22,7 @@ class UserController extends Controller
     /**
      * @var array|string[]
      */
-    private array $monthsNumber = [
+    protected array $monthsNumber = [
         '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
         '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
     ];
@@ -74,10 +74,9 @@ class UserController extends Controller
         $user->address = $request->userAddress;
         $user->city = $request->userCity;
         $user->municipality = $request->userMunicipality;
-        $user->old_code = $request->userOldCode;
         $user->password = static::$password ??= Hash::make($request->userDocumentNumber);
         $user->paid_subscription = 'DEBE';
-        $user->status = 'ACTIVO';
+        $user->status = $request->userStatus;
 
         if ($user->save()) {
             $subscription = new Subscription();
@@ -166,7 +165,7 @@ class UserController extends Controller
         $user->email = $request->editUserEmail;
         $user->phone_number = $request->editUserPhoneNumber;
         $user->address = $request->editUserAddress;
-        $user->old_code = $request->editUserOldCode;
+        $user->status = $request->statusUser;
 
         // Agregar o actualizar servicios del usuario
         if ($user->save()) {

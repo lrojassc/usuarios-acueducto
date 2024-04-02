@@ -17,7 +17,6 @@
                 <th scope="col">Número de documento</th>
                 <th scope="col">Teléfono</th>
                 <th scope="col">Dirección</th>
-                <th scope="col">Código Antiguo</th>
                 <th scope="col">Acción</th>
             </tr>
             </thead>
@@ -29,7 +28,6 @@
                     <td>{{$user->document_number}}</td>
                     <td>{{$user->phone_number}}</td>
                     <td>{{$user->address}}</td>
-                    <td>{{$user->old_code}}</td>
                     <td><a href="{{ route('user.show', $user->id) }}">VER</a></td>
                     <td><a href="{{ route('user.edit', $user->id) }}">EDITAR</a></td>
                 </tr>

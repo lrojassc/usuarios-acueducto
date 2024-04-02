@@ -27,7 +27,6 @@ class UsersImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChun
         $user->document_number = $row['document_number'];
         $user->email = $row['email'];
         $user->phone_number = $row['phone_number'];
-        $user->old_code = $row['old_code'];
         $user->paid_subscription = $row['paid_subscription'];
         $user->address = $row['address'];
         $user->city = $row['city'];
