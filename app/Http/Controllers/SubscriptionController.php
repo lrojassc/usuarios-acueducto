@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SubscriptionsImport;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SubscriptionController extends Controller
 {
@@ -34,5 +36,19 @@ class SubscriptionController extends Controller
     {
         $services_by_user = User::find($user_id)->services;
         return response()->json(['services' => $services_by_user]);
+    }
+
+    /**
+     * Importar datos de servicios de tabla de excel
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function import(Request $request): \Illuminate\Http\RedirectResponse
+    {
+        $file = $request->file('import_file_services_users');
+        Excel::import(new SubscriptionsImport, $file);
+        return redirect()->route('user.list')->with('success', 'Servicios importados correctamente');
     }
 }

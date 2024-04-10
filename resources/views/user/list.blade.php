@@ -37,7 +37,13 @@
         <form action="{{ route('user.import') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="file" name="import_file_users">
-            <button class="btn btn-primary">Importar</button>
+            <button class="btn btn-primary">Importar Usuarios</button>
+        </form>
+        <br>
+        <form action="{{ route('services_user.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="import_file_services_users">
+            <button class="btn btn-primary">Importar Servicios</button>
         </form>
     </div>
 @endsection

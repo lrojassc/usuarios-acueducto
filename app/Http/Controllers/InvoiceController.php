@@ -30,6 +30,8 @@ class InvoiceController extends Controller
         '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
     ];
 
+    private int $valueInvoice = 10000;
+
     /**
      * Lista todas las facturas
      *
@@ -113,7 +115,7 @@ class InvoiceController extends Controller
                 $services_by_user = $user->services;
                 foreach ($services_by_user as $service) {
                     $invoice = new Invoice();
-                    $invoice->value = 10000;
+                    $invoice->value = $user->full_payment === 'SI' ? $this->valueInvoice : $this->valueInvoice/2;
                     $invoice->description = 'Servicio acueducto ' . $service->service;
                     $invoice->year_invoiced = date('Y');
                     $invoice->month_invoiced = $current_month;

@@ -4,7 +4,7 @@
 
 .container-invoices {
     width: 100%;
-    height: 100%;
+    height: 97%;
 }
 
 .row-invoice {
@@ -12,13 +12,35 @@
 }
 
 .invoice {
-    padding: 1%;
-    width: 47.7%;
-    height: 541px;
+    margin-left: 2px;
+    padding: 15px;
+    width: 45.8%;
+    height: 619px;
     float: left;
     border-color: black;
-    border-width: 1px;
+    border-width: 0.5px;
     border-style: solid
+}
+
+.info_invoice {
+    border-color: black;
+    border-width: 0.5px;
+    border-style: solid;
+    height: 63%
+}
+
+.separate_invoice{
+    background-color: black;
+    height: 1px;
+    margin-bottom: 7px;
+    margin-top: 7px;
+}
+
+.info_payment_invoice {
+    border-color: black;
+    border-width: 0.5px;
+    border-style: solid;
+    height: 23%
 }
 
 .clearfix-dos {

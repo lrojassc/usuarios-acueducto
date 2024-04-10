@@ -33,6 +33,8 @@ class GeneratePdfController extends UserController
                 $suma_total_facturas = 0;
                 $value_last_invoice = 0;
                 $descripcion_ultima_factura = '';
+                $codigo_facturas_pendientes = 'No. ';
+                $id_last_invoice = '';
 
                 $invoices_by_subscription = $subscription_model->find($service->id)->invoices;
                 foreach ($invoices_by_subscription as $key_invoice => $invoice) {
@@ -42,8 +44,11 @@ class GeneratePdfController extends UserController
                         $value_last_invoice = (int) str_replace(["$", "."], '', $invoice->value);
                         $descripcion_ultima_factura = $invoice->description;
                         $mes_facturado = $invoice->month_invoiced;
+                        $codigo_facturas_pendientes .= $invoice->id . ' - ';
+                        $id_last_invoice = $invoice->id;
                     }
                 }
+                $facturas_pendiente = rtrim($codigo_facturas_pendientes, '- ');
 
                 $facturas_pendientes = $count_invoice_active - 1;
                 $observacion = $facturas_pendientes >= 1 ? 'Por favor realice el pago de forma inmediata'
@@ -52,21 +57,24 @@ class GeneratePdfController extends UserController
                 $imprimir_invoices[] = [
                     'usuario' => $user->name,
                     'direccion' => $user->address . ' - ' . $user->city,
-                    'codigo' => $user->id,
+                    'codigo_usuario' => $user->id,
                     'servicio' => $service->service,
                     'valor_total_facturas' => '$' . number_format(num: $suma_total_facturas, thousands_separator: '.'),
                     'atrasos' => $facturas_pendientes,
                     'valor_ultima_factura' => '$' . number_format(num: $value_last_invoice, thousands_separator: '.'),
                     'descripcion_ultima_factura' => $descripcion_ultima_factura,
                     'observacion' => $observacion,
-                    'periodo' => $mes_facturado
+                    'periodo' => 'Del 01 al 30 de ' . $mes_facturado,
+                    'facturas_pendientes' => $facturas_pendiente,
+                    'id_ultima_factura' => $id_last_invoice,
+                    'fecha_limite_pago' => 'Hasta el 25 de ' . $this->monthsNumber[date("m", strtotime("+1 month"))],
                 ];
             }
 
         }
 
         $pdf = PDF::loadView('pdf.payment', compact('imprimir_invoices'));
-        $pdf->setPaper('A4');
+        $pdf->setPaper('legal');
         return $pdf->stream('prueba.pdf');
     }
 

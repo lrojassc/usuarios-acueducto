@@ -59,13 +59,25 @@
                                 <label for="editUserMunicipality">Municipio</label>
                             </div>
                             <div class="form-floating mb-3 mt-3 col-4">
-                                <select class="form-select" id="statusUser" name="statusUser" @if($mode == 'show') disabled @endif>>
+                                <select class="form-select" id="statusUser" name="statusUser" @if($mode == 'show') disabled @endif>
                                     <option selected value="{{ $user->status }}">{{ $user->status }}</option>
+                                    <option value="ACTIVO">ACTIVO</option>
                                     <option value="SUSPENDIDO">SUSPENDIDO</option>
                                 </select>
                                 <label for="statusUser">Estado del Suscriptor</label>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="form-floating mb-3 mt-3 col-4">
+                                <select class="form-select" id="userFullPayment" name="userFullPayment" @if($mode == 'show') disabled @endif>
+                                    <option selected value="{{ $user->full_payment }}">{{ $user->full_payment }}</option>
+                                    <option value="SI">SI</option>
+                                    <option value="MITAD">PAGA LA MITAD</option>
+                                </select>
+                                <label for="userFullPayment">¿Usuario Paga Servicio Completo?</label>
+                            </div>
+                        </div>
+
 
                         <!-- Sección de servicios activos por usuario o para registrar-->
                         <hr>

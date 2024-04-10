@@ -53,6 +53,7 @@ Route::controller(SubscriptionController::class)->group(function () {
    $subscription_path = '/admin/service/';
    Route::post($subscription_path . 'delete', 'delete')->name('service.delete');
    Route::get($subscription_path . '{userId}/services', 'getServicesByUser');
+   Route::post($subscription_path . 'import', 'import')->name('services_user.import');
 });
 
 Route::controller(GeneratePdfController::class)->group(function () {

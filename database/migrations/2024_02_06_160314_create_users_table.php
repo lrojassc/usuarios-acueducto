@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('document_type');
-            $table->string('document_number')->unique();
+            $table->string('document_number');
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('paid_subscription');
+            $table->string('full_payment');
             $table->string('address');
             $table->string('city');
             $table->string('municipality');

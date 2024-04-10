@@ -76,6 +76,7 @@ class UserController extends Controller
         $user->municipality = $request->userMunicipality;
         $user->password = static::$password ??= Hash::make($request->userDocumentNumber);
         $user->paid_subscription = 'DEBE';
+        $user->full_payment = 'SI';
         $user->status = $request->userStatus;
 
         if ($user->save()) {
@@ -166,6 +167,7 @@ class UserController extends Controller
         $user->phone_number = $request->editUserPhoneNumber;
         $user->address = $request->editUserAddress;
         $user->status = $request->statusUser;
+        $user->full_payment = $request->userFullPayment;
 
         // Agregar o actualizar servicios del usuario
         if ($user->save()) {
@@ -196,7 +198,7 @@ class UserController extends Controller
     }
 
     /**
-     * Importar datos de tabla excel
+     * Importar datos de usuarios de tabla excel
      *
      * @param Request $request
      *
