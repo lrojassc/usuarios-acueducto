@@ -27,6 +27,12 @@
                                     <td class="title-bold pdf-massive-td" style="width: 40%; font-size: 15px!important; padding: 2.5px!important;">Factura / Valor</td>
                                     <td class="pdf-massive-td" style="font-size: 15px!important; padding: 2.5px!important;">No. {{$invoice['id_ultima_factura']}} - {{$invoice['valor_ultima_factura']}}</td>
                                 </tr>
+                                @if($invoice['debe_suscripcion'] === true)
+                                    <tr>
+                                        <td class="title-bold pdf-massive-td" style="width: 40%; font-size: 15px!important; padding: 2.5px!important;">Debe suscripcion</td>
+                                        <td class="pdf-massive-td" style="font-size: 15px!important; padding: 2.5px!important;">{{$invoice['descripcion_suscripcion']}}</td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td class="title-bold pdf-massive-td" style="width: 40%; font-size: 15px!important; padding: 2.5px!important;">Periodo facturado</td>
                                     <td class="pdf-massive-td" style="font-size: 15px!important; padding: 2.5px!important;">{{$invoice['periodo']}}</td>

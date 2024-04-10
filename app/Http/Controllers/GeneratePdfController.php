@@ -35,9 +35,18 @@ class GeneratePdfController extends UserController
                 $descripcion_ultima_factura = '';
                 $codigo_facturas_pendientes = 'No. ';
                 $id_last_invoice = '';
+                $debe_suscripcion = FALSE;
+                $desc_subscripcion = '';
 
                 $invoices_by_subscription = $subscription_model->find($service->id)->invoices;
                 foreach ($invoices_by_subscription as $key_invoice => $invoice) {
+
+                    // Comprobar si debe accion de agua
+                    if ($invoice->concept === 'SUSCRIPCION' && $invoice->status !== 'PAGADA') {
+                        $debe_suscripcion = TRUE;
+                        $desc_subscripcion = 'Valor restante ' . $invoice->value;
+                    }
+
                     if ($invoice->status !== 'PAGADA') {
                         $count_invoice_active++;
                         $suma_total_facturas += (int) str_replace(["$", "."], '', $invoice->value);
@@ -68,6 +77,8 @@ class GeneratePdfController extends UserController
                     'facturas_pendientes' => $facturas_pendiente,
                     'id_ultima_factura' => $id_last_invoice,
                     'fecha_limite_pago' => 'Hasta el 25 de ' . $this->monthsNumber[date("m", strtotime("+1 month"))],
+                    'debe_suscripcion' => $debe_suscripcion,
+                    'descripcion_suscripcion' => $desc_subscripcion
                 ];
             }
 
