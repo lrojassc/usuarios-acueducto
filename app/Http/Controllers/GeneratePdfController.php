@@ -44,7 +44,7 @@ class GeneratePdfController extends UserController
                     // Comprobar si debe accion de agua
                     if ($invoice->concept === 'SUSCRIPCION' && $invoice->status !== 'PAGADA') {
                         $debe_suscripcion = TRUE;
-                        $desc_subscripcion = 'Valor restante ' . $invoice->value;
+                        $desc_subscripcion = 'Valor pendiente ' . $invoice->value;
                     }
 
                     if ($invoice->status !== 'PAGADA') {

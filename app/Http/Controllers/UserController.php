@@ -157,7 +157,6 @@ class UserController extends Controller
 
         $request->validate([
             'editUserName' => ['required', 'string'],
-            'editUserPhoneNumber' => ['required', 'numeric'],
             'editUserAddress' => ['required', 'string']
         ]);
 
