@@ -1,0 +1,49 @@
+.body-pdf {
+    margin: 20px;
+    width: auto;
+    height: auto;
+    border-color: black;
+    border-width: 1px;
+    border-style: none;
+}
+
+.text-pdf {
+    text-align: center;
+}
+
+.user-info {
+    padding:15px;
+    width: auto;
+    height: 14%;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+}
+
+caption {
+    text-align: center;
+}
+
+.invoice-data {
+    width: 100%;
+    height: auto;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+}
+
+th, td {
+    padding: 4px;
+    border-bottom: 1px solid #999;
+}
+
+.title-bold {
+    font-weight: bold;
+}
+
+.pdf-td {
+    font-size: 20px;
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+}

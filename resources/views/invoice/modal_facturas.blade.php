@@ -10,7 +10,7 @@
 
 <ul class="nav nav-underline">
     <li class="nav-item">
-        <a class="nav-link mb-2 fs-5" type="button" aria-current="page" data-bs-toggle="modal" data-bs-target="#modalGenerateInvoices">¿Desea generar facturas masivas para pago adelantado?</a>
+        <a class="nav-link mb-2 fs-5" type="button" aria-current="page" data-bs-toggle="modal" data-bs-target="#modalGenerateInvoices">¿Desea generar facturas masivas para pago adelantado? -- PENDIENTE AJUSTAR</a>
     </li>
 </ul>
 <div class="modal fade" id="modalGenerateInvoices" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

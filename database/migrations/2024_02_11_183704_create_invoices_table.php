@@ -11,12 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subscriptions', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('service');
+            $table->integer('value');
+            $table->string('description');
+            $table->string('year_invoiced')->nullable();
+            $table->string('month_invoiced')->nullable();
+            $table->string('concept');
+            $table->string('status');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('subscription_id');
+
             $table->foreign('user_id')
                 ->references('id')->on('users');
+
+            $table->foreign('subscription_id')
+                ->references('id')->on('subscriptions');
+
             $table->timestamps();
         });
     }
@@ -26,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subscriptions');
+        Schema::dropIfExists('invoices');
     }
 };

@@ -4,6 +4,7 @@ use App\Http\Controllers\GeneratePdfController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
@@ -42,12 +43,21 @@ Route::controller(InvoiceController::class)->group(function() {
 });
 
 Route::controller(PaymentController::class)->group(function () {
-    $path_payment = '/admin/payment';
+    $path_payment = '/admin/payment/';
     Route::get($path_payment . 'list', 'list')->name('payment.list');
     Route::get($path_payment . 'show/{payment}', 'show')->name('payment.show');
     Route::put($path_payment . 'payment/{invoice}', 'payment')->name('payment.invoice');
 });
 
+Route::controller(SubscriptionController::class)->group(function () {
+   $subscription_path = '/admin/service/';
+   Route::post($subscription_path . 'delete', 'delete')->name('service.delete');
+   Route::get($subscription_path . '{userId}/services', 'getServicesByUser');
+   Route::post($subscription_path . 'import', 'import')->name('services_user.import');
+});
+
 Route::controller(GeneratePdfController::class)->group(function () {
-   Route::get('/admin/pdf', 'getPdf')->name('pdf');
+   Route::get('/admin/generate-massive-invoice-pdf', 'generateMassiveInvoicePdf')->name('massive_invoice.pdf');
+   Route::get('/admin/generate-account-status-by-user-pdf/{user}', 'generateAccountStatusByUser')->name('pdf.account_status_by_user');
+   Route::post('/admin/generate-status-payment/{payment}', 'generateStatusPayment')->name('pdf.status_payment');
 });

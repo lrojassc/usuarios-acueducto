@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\MassiveInvoice;
 use App\Models\Payment;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -28,6 +29,8 @@ class InvoiceController extends Controller
         '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
         '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
     ];
+
+    private int $valueInvoice = 10000;
 
     /**
      * Lista todas las facturas
@@ -75,11 +78,13 @@ class InvoiceController extends Controller
 
         $invoice = new Invoice();
         $invoice->value = $request->valueInvoice;
+        $invoice->year_invoiced = date('Y');
         $invoice->month_invoiced = $request->monthInvoice;
         $invoice->description = $request->descriptionInvoice;
         $invoice->status = 'PENDIENTE';
         $invoice->concept = $request->conceptInvoice;
         $invoice->user_id = $request->userInvoice;
+        $invoice->subscription_id = $request->serviceUser;
 
         $invoice->save();
 
@@ -93,7 +98,8 @@ class InvoiceController extends Controller
      */
     public function createMassive(): RedirectResponse
     {
-        $users = User::all();
+        $user_model = new User();
+        $users = $user_model::where('status', 'ACTIVO')->get();
         $massive_invoice = new MassiveInvoice();
 
         $current_month = $this->monthsNumber[date('m')];
@@ -106,17 +112,17 @@ class InvoiceController extends Controller
         $users_without_invoices = $this->getUsersWithoutInvoices($users, $current_month);
         if ($last_month_massive_invoice === NULL || $last_month_massive_invoice != $current_month) {
             foreach ($users_without_invoices as $user) {
-                $active_services = $user->active_services;
-                for ($i = 1; $i <= $active_services; $i++) {
+                $services_by_user = $user->services;
+                foreach ($services_by_user as $service) {
                     $invoice = new Invoice();
-
-                    $invoice->value = 10000;
-                    $invoice->description = 'Servicio de agua mensual apartamento ' . $i;
+                    $invoice->value = $user->full_payment === 'SI' ? $this->valueInvoice : $this->valueInvoice/2;
+                    $invoice->description = 'Servicio acueducto ' . $service->service;
                     $invoice->year_invoiced = date('Y');
                     $invoice->month_invoiced = $current_month;
                     $invoice->concept = 'MENSUALIDAD';
                     $invoice->status = 'PENDIENTE';
                     $invoice->user_id = $user->id;
+                    $invoice->subscription_id = $service->id;
 
                     $invoice->save();
                 }

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @method static where(string $string, string $string1)
+ * @method static find(mixed $id)
  */
 class Payment extends Model
 {

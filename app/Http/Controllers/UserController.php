@@ -22,7 +22,7 @@ class UserController extends Controller
     /**
      * @var array|string[]
      */
-    private array $monthsNumber = [
+    protected array $monthsNumber = [
         '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
         '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
     ];
@@ -74,18 +74,20 @@ class UserController extends Controller
         $user->address = $request->userAddress;
         $user->city = $request->userCity;
         $user->municipality = $request->userMunicipality;
-        $user->old_code = $request->userOldCode;
         $user->password = static::$password ??= Hash::make($request->userDocumentNumber);
         $user->paid_subscription = 'DEBE';
-        $user->status = 'ACTIVO';
+        $user->full_payment = 'SI';
+        $user->status = $request->userStatus;
 
         if ($user->save()) {
             $subscription = new Subscription();
             $user_id = $user::all()->last()->id;
             $subscription->service = 'Residencial 1';
+            $subscription->status = 'ACTIVO';
             $subscription->user_id = $user_id;
 
             if ($subscription->save()) {
+                $subscription_id = $subscription::all()->last()->id;
                 $invoice = new Invoice();
                 $invoice->value = $this->value_subscription;
                 $invoice->description = 'Suscripción al servicio de acueducto';
@@ -94,6 +96,7 @@ class UserController extends Controller
                 $invoice->concept = 'SUSCRIPCION';
                 $invoice->status = 'PENDIENTE';
                 $invoice->user_id = $user_id;
+                $invoice->subscription_id = $subscription_id;
                 $invoice->save();
             }
         }
@@ -101,31 +104,40 @@ class UserController extends Controller
         return redirect()->route('user.list');
     }
 
+    /**
+     * Ver información de usuario para poder actualizar
+     *
+     * @param User $user
+     *
+     */
     public function edit(User $user) {
-        return view('user.show', ['mode' => 'edit'], compact('user'));
+        $services_by_user = $user::find($user->id())->services;
+        return view('user.show', ['mode' => 'edit'], compact('user', 'services_by_user'));
     }
 
     /**
      * Ver información detallada del usuario
      *
      * @param User $user
-     * @param Invoice $invoice
      *
      */
-    public function show(User $user, Invoice $invoice) {
+    public function show(User $user) {
         $invoices_by_user = User::find($user->id())->invoices;
         $services_by_user = User::find($user->id())->services;
         $total_invoices = $this->getTotalInvoices($invoices_by_user);
-        $total_facturas = $total_invoices['total_valor_pendiente'] + $total_invoices['total_pagos_realizados'];
+        $subscription_status = $user->paid_subscription === 'PAGADA'
+            ? 'Esta suscripción se encuentra PAGADA completamente'
+            : 'Esta suscripción aún NO SE HA PAGADO completamente';
 
         return view('user.show', [
             'mode' => 'show',
             'user' => $user,
             'invoices' => $invoices_by_user,
-            'services' => $services_by_user,
-            'total_invoices' => '$' . number_format(num: $total_invoices['total_valor_pendiente'], thousands_separator: '.'),
-            'total_pagos_realizados' => '$' . number_format(num: $total_invoices['total_pagos_realizados'], thousands_separator: '.'),
-            'total_facturas' => '$' . number_format(num: $total_facturas, thousands_separator: '.')
+            'services_by_user' => $services_by_user,
+            'total_invoices' => $total_invoices['total_valor_pendiente'],
+            'total_pagos_realizados' => $total_invoices['total_pagos_realizados'],
+            'total_facturas' => $total_invoices['total_facturas'],
+            'subscription_status' => $subscription_status
         ]);
     }
 
@@ -139,26 +151,53 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user): RedirectResponse
     {
+        // Obtener cantidad de servicios por actualizar y servicios por agregar
+        $update_services = $this->getServicesByUser($request, 'editActiveServices');
+        $new_services = $this->getServicesByUser($request, 'nuevoServicio');
+
         $request->validate([
             'editUserName' => ['required', 'string'],
-            'editUserPhoneNumber' => ['required', 'numeric'],
             'editUserAddress' => ['required', 'string']
         ]);
+
 
         $user->name = $request->editUserName;
         $user->email = $request->editUserEmail;
         $user->phone_number = $request->editUserPhoneNumber;
         $user->address = $request->editUserAddress;
-        $user->old_code = $request->editUserOldCode;
-        $user->active_services = $request->editActiveServices;
+        $user->status = $request->statusUser;
+        $user->full_payment = $request->userFullPayment;
 
-        $user->save();
+        // Agregar o actualizar servicios del usuario
+        if ($user->save()) {
+            $subscriptions_by_user = $user::find($user->id)->services;
+            $count = 0;
+            foreach ($update_services as $update_service) {
+                if (!empty($update_service)) {
+                    $subscriptions_by_user[$count]->service = $update_service;
+                    $subscriptions_by_user[$count]->status = 'ACTIVO';
+                    $subscriptions_by_user[$count]->save();
+                }
+                $count++;
+            }
+
+            foreach ($new_services as $new_service) {
+                if (!empty($new_service)) {
+                    $new_subscription = new Subscription();
+                    $new_subscription->service = $new_service;
+                    $new_subscription->user_id = $user->id;
+                    $new_subscription->status = 'ACTIVO';
+                    $new_subscription->save();
+                }
+            }
+
+        }
 
         return redirect()->route('user.list');
     }
 
     /**
-     * Importar datos de tabla excel
+     * Importar datos de usuarios de tabla excel
      *
      * @param Request $request
      *
@@ -194,9 +233,31 @@ class UserController extends Controller
             $total_pagos_realizados += $pago_realizado;
         }
 
-        $total_invoices['total_valor_pendiente'] = $total_valor_pendiente;
-        $total_invoices['total_pagos_realizados'] = $total_pagos_realizados;
+        $total_facturas = $total_valor_pendiente + $total_pagos_realizados;
+        return [
+            'total_valor_pendiente' => '$' . number_format(num: $total_valor_pendiente, thousands_separator: '.'),
+            'total_pagos_realizados' => '$' . number_format(num: $total_pagos_realizados, thousands_separator: '.'),
+            'total_facturas' => '$' . number_format(num: $total_facturas, thousands_separator: '.'),
+        ];
+    }
 
-        return $total_invoices;
+    /**
+     * Obtener los servicios activos o para crear
+     *
+     * @param $request
+     * @param $search
+     *
+     * @return array
+     */
+    public function getServicesByUser($request, $search): array
+    {
+        $services = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $services['service_'.$i] = $request->{$search.$i};
+            if ($services['service_'.$i] === NULL) {
+                unset($services['service_'.$i]);
+            }
+        }
+        return $services;
     }
 }
