@@ -144,8 +144,9 @@ class InvoiceController extends Controller
         $payments = $invoice::find($invoice->id)->payments;
         $pago_realizado = $payment->getTotalPayment($payments);
         $payment_total = '$' . number_format(num: $pago_realizado, thousands_separator: '.') ?? '$0';
+        $service = $invoice->subscription->service;
 
-        return view('invoice.show', compact('invoice', 'payments', 'payment_total'));
+        return view('invoice.show', compact('invoice', 'payments', 'payment_total', 'service'));
     }
 
     /**

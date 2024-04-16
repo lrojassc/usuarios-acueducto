@@ -41,6 +41,10 @@
                             <input type="text" class="form-control" id="conceptInvoice" name="conceptInvoice" value="{{ $invoice->concept }}" disabled>
                             <label for="conceptInvoice">Concepto</label>
                         </div>
+                        <div class="form-floating mb-3 mt-3 col">
+                            <input type="text" class="form-control" id="serviceUser" name="serviceUser" value="{{ $service }}" disabled>
+                            <label for="serviceUser">Servicio</label>
+                        </div>
                         @if($invoice->value == '$0' and $invoice->status == 'PAGADA')
                             <div class="form-floating mb-3 mt-3 col">
                                 <input type="text" class="form-control" id="paymentStatus" name="paymentStatus" value="{{ $invoice->status }}" @if($invoice->value == '$0' and $invoice->status == 'PAGADA') disabled @endif >
