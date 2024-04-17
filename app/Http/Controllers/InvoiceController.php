@@ -138,6 +138,12 @@ class InvoiceController extends Controller
         return redirect()->route('invoice.list')->with($message_type, $message);
     }
 
+    /**
+     * Ver informacion de la factura para pagar
+     *
+     * @param Invoice $invoice
+     * @param Payment $payment
+     */
     public function show(Invoice $invoice, Payment $payment)
     {
         $payments = $invoice::find($invoice->id)->payments;
@@ -146,6 +152,33 @@ class InvoiceController extends Controller
         $service = $invoice->subscription->service;
 
         return view('invoice.show', compact('invoice', 'payments', 'payment_total', 'service'));
+    }
+
+    /**
+     * Vista para actualizar algunos campos de la factura
+     *
+     * @param Invoice $invoice
+     */
+    public function edit(Invoice $invoice)
+    {
+        return view('invoice.edit', compact('invoice'));
+    }
+
+    /**
+     * Actualizar informacion de la factura
+     *
+     * @param Request $request
+     * @param Invoice $invoice
+     *
+     */
+    public function update(Request $request, Invoice $invoice)
+    {
+        $value_invoice = str_replace(["$", "."], '', $request->updateValueInvoice);
+        $invoice->value = $value_invoice;
+        $invoice->save();
+
+        $invoices = Invoice::where('status', '!=', 'INACTIVO')->get();
+        return view('invoice.list', compact('invoices'));
     }
 
     /**
