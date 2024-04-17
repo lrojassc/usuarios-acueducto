@@ -40,6 +40,7 @@
                     <td>{{$invoice->concept}}</td>
                     <td><a href="{{ route('user.show', $invoice->user_id['id']) }}">{{$invoice->user_id['name']}}</a></td>
                     <td><a href="{{ route('invoice.show', $invoice->id) }}">PAGAR</a></td>
+                    <td><a href="{{ route('invoice.delete', $invoice->id) }}">ELIMINAR</a></td>
                 </tr>
             @endforeach
             </tbody>

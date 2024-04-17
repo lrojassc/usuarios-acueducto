@@ -7,7 +7,6 @@ use App\Models\Payment;
 use App\Models\Subscription;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
-use Illuminate\Http\Request;
 
 class GeneratePdfController extends UserController
 {
@@ -47,7 +46,7 @@ class GeneratePdfController extends UserController
                         $desc_subscripcion = 'Valor pendiente ' . $invoice->value;
                     }
 
-                    if ($invoice->status !== 'PAGADA') {
+                    if ($invoice->status !== 'PAGADA' && $invoice->status !== 'INACTIVO') {
                         $count_invoice_active++;
                         $suma_total_facturas += (int) str_replace(["$", "."], '', $invoice->value);
                         $value_last_invoice = (int) str_replace(["$", "."], '', $invoice->value);
@@ -86,7 +85,7 @@ class GeneratePdfController extends UserController
 
         $pdf = PDF::loadView('pdf.payment', compact('imprimir_invoices'));
         $pdf->setPaper('legal');
-        return $pdf->stream('prueba.pdf');
+        return $pdf->stream('masivo_facturas.pdf');
     }
 
     /**
@@ -111,12 +110,12 @@ class GeneratePdfController extends UserController
                 'format_value' => '$' . number_format(num: $payment->value, thousands_separator: '.')
             ]);
         $pdf->setPaper([0,0,530,400]);
-        return $pdf->stream('prueba.pdf');
+        return $pdf->stream('pago.pdf');
     }
 
     public function generateAccountStatusByUser(User $user): \Illuminate\Http\Response
     {
-        $invoices_by_user = User::find($user->id())->invoices;
+        $invoices_by_user = Invoice::where('user_id', $user->id())->where('status', '!=', 'INACTIVO')->get();
         $total_invoices = $this->getTotalInvoices($invoices_by_user);
 
         // Agregar descripcion del servicio
@@ -133,6 +132,6 @@ class GeneratePdfController extends UserController
         );
 
         $pdf->setPaper('A4');
-        return $pdf->stream('prueba.pdf');
+        return $pdf->stream('estado_cuenta_usuario.pdf');
     }
 }

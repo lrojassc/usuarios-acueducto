@@ -38,8 +38,7 @@ class InvoiceController extends Controller
      */
     public function list()
     {
-        $invoices = Invoice::all();
-        //return $invoices;
+        $invoices = Invoice::where('status', '!=', 'INACTIVO')->get();
         return view('invoice.list', compact('invoices'));
     }
 
@@ -147,6 +146,20 @@ class InvoiceController extends Controller
         $service = $invoice->subscription->service;
 
         return view('invoice.show', compact('invoice', 'payments', 'payment_total', 'service'));
+    }
+
+    /**
+     * Inactivar factura
+     *
+     * @param Invoice $invoice
+     *
+     * @return RedirectResponse
+     */
+    public function delete(Invoice $invoice)
+    {
+        $invoice->status = 'INACTIVO';
+        $invoice->save();
+        return redirect()->route('invoice.list');
     }
 
     /**

@@ -122,7 +122,7 @@ class UserController extends Controller
      *
      */
     public function show(User $user) {
-        $invoices_by_user = User::find($user->id())->invoices;
+        $invoices_by_user = Invoice::where('user_id', $user->id())->where('status', '!=', 'INACTIVO')->get();
         $services_by_user = User::find($user->id())->services;
         $total_invoices = $this->getTotalInvoices($invoices_by_user);
         $subscription_status = $user->paid_subscription === 'PAGADA'

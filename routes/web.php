@@ -38,6 +38,7 @@ Route::controller(InvoiceController::class)->group(function() {
     Route::get($path_invoice . 'create', 'create')->name('invoice.create');
     Route::post($path_invoice . 'store', 'store')->name('invoice.store');
     Route::get($path_invoice . 'show/{invoice}', 'show')->name('invoice.show');
+    Route::get($path_invoice . 'delete/{invoice}', 'delete')->name('invoice.delete');
     Route::get($path_invoice . 'create-massive', 'createMassive')->name('invoice.create_massive');
     Route::post($path_invoice . 'create-invoices-list-by-user/{user}', 'createInvoicesByUser')->name('invoice.create_invoice_by_user');
 });
