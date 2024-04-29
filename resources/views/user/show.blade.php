@@ -97,6 +97,16 @@
                                                        value="{{ $service->service }}" @if($mode == 'show') disabled @endif
                                                 >
 
+                                                 <!-- Modal para pagar facturas adelantadas -->
+                                                @if($mode == 'show')
+                                                    <!-- Declara variable $id_service para enviar al modal -->
+                                                    @php ($id_service = $service->id)
+                                                    @php ($service_name = $service->service)
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalGenerateInvoices{{ $id_service }}">Facturas Adelantadas</button>
+                                                    @include('invoice.modal_facturas', [$id_service, $service_name])
+                                                @endif
+                                 
+
                                                 <!-- Visualizar boton de eliminar servicio-->
                                                 @if($mode == 'edit')
                                                     <button type="button" class="btn btn-outline-secondary" id="editActiveServices{{$key + 1}}" onclick="deleteService({{$service}})">Eliminar</button>
@@ -119,9 +129,6 @@
                     </form>
                 </div>
             </div>
-            @if($mode == 'show')
-                @include('invoice.modal_facturas')
-            @endif
 
             <!--Enlace para generar estado de cuenta por usuario-->
             <ul class="nav nav-underline">

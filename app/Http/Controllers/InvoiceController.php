@@ -203,8 +203,9 @@ class InvoiceController extends Controller
      *
      * @return RedirectResponse
      */
-    public function createInvoicesByUser(User $user, Request $request): RedirectResponse
+    public function createInvoicesForUserByService($service, Request $request): RedirectResponse
     {
+        $service = Subscription::find($service);
         $months_data = $request->post();
         $current_year = date('Y') !== $request->year ? date('Y') : $request->year;
 

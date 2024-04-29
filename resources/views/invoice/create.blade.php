@@ -45,6 +45,7 @@
                             <select class="form-select" id="conceptInvoice" name="conceptInvoice">
                                 <option selected value="RECONEXION">RECONEXIÓN</option>
                                 <option value="SUSCRIPCION">DERECHO DE SUSCRIPCIÓN</option>
+                                <option value="MENSUALIDAD">MENSUALIDAD</option>
                             </select>
                             <label for="conceptInvoice">Concepto</label>
                         </div>

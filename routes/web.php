@@ -42,7 +42,7 @@ Route::controller(InvoiceController::class)->group(function() {
     Route::put($path_invoice . 'update/{invoice}', 'update')->name('invoice.update');
     Route::get($path_invoice . 'delete/{invoice}', 'delete')->name('invoice.delete');
     Route::get($path_invoice . 'create-massive', 'createMassive')->name('invoice.create_massive');
-    Route::post($path_invoice . 'create-invoices-list-by-user/{user}', 'createInvoicesByUser')->name('invoice.create_invoice_by_user');
+    Route::post($path_invoice . 'create-invoices-list-for-user-by-service/{service}', 'createInvoicesForUserByService')->name('invoice.create_invoice_for_user_by_service');
 });
 
 Route::controller(PaymentController::class)->group(function () {
