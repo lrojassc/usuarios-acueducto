@@ -113,17 +113,19 @@ class InvoiceController extends Controller
             foreach ($users_without_invoices as $user) {
                 $services_by_user = $user->services;
                 foreach ($services_by_user as $service) {
-                    $invoice = new Invoice();
-                    $invoice->value = $user->full_payment === 'SI' ? $this->valueInvoice : $this->valueInvoice/2;
-                    $invoice->description = 'Servicio acueducto ' . $service->service;
-                    $invoice->year_invoiced = date('Y');
-                    $invoice->month_invoiced = $current_month;
-                    $invoice->concept = 'MENSUALIDAD';
-                    $invoice->status = 'PENDIENTE';
-                    $invoice->user_id = $user->id;
-                    $invoice->subscription_id = $service->id;
+                    if ($service->status === 'ACTIVO') {
+                        $invoice = new Invoice();
+                        $invoice->value = $user->full_payment === 'SI' ? $this->valueInvoice : $this->valueInvoice / 2;
+                        $invoice->description = 'Servicio acueducto ' . $service->service;
+                        $invoice->year_invoiced = date('Y');
+                        $invoice->month_invoiced = $current_month;
+                        $invoice->concept = 'MENSUALIDAD';
+                        $invoice->status = 'PENDIENTE';
+                        $invoice->user_id = $user->id;
+                        $invoice->subscription_id = $service->id;
 
-                    $invoice->save();
+                        $invoice->save();
+                    }
                 }
             }
 
