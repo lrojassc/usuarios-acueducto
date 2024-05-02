@@ -8,7 +8,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
-class GeneratePdfController extends UserController
+class GeneratePdfController extends Controller
 {
 
     /**

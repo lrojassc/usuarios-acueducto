@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConfigController;
 use App\Http\Controllers\GeneratePdfController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
@@ -63,4 +64,9 @@ Route::controller(GeneratePdfController::class)->group(function () {
    Route::get('/admin/generate-massive-invoice-pdf', 'generateMassiveInvoicePdf')->name('massive_invoice.pdf');
    Route::get('/admin/generate-account-status-by-user-pdf/{user}', 'generateAccountStatusByUser')->name('pdf.account_status_by_user');
    Route::post('/admin/generate-status-payment/{payment}', 'generateStatusPayment')->name('pdf.status_payment');
+});
+
+Route::controller(ConfigController::class)->group(function () {
+    Route::get('/admin/config', 'index')->name('config.index');
+    Route::post('/admin/config/store', 'store')->name('config.store');
 });

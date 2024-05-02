@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Config;
 use App\Models\Invoice;
 use App\Models\MassiveInvoice;
 use App\Models\Payment;
@@ -12,25 +13,6 @@ use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
-
-    /**
-     * @var array|string[]
-     */
-    private array $monthsDetails = [
-        'ENERO' => 'ENERO', 'FEBRERO' => 'FEBRERO', 'MARZO' => 'MARZO', 'ABRIL' => 'ABRIL',
-        'MAYO' => 'MAYO', 'JUNIO' => 'JUNIO', 'JULIO' => 'JULIO', 'AGOSTO' => 'AGOSTO', 'SEPTIEMBRE' => 'SEPTIEMBRE',
-        'OCTUBRE' => 'OCTUBRE', 'NOVIEMBRE' => 'NOVIEMBRE', 'DICIEMBRE' => 'DICIEMBRE'
-    ];
-
-    /**
-     * @var array|string[]
-     */
-    private array $monthsNumber = [
-        '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
-        '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
-    ];
-
-    private int $valueInvoice = 10000;
 
     /**
      * Lista todas las facturas
@@ -97,11 +79,12 @@ class InvoiceController extends Controller
      */
     public function createMassive(): RedirectResponse
     {
+        $config = new Config();
         $user_model = new User();
         $users = $user_model::where('status', 'ACTIVO')->get();
         $massive_invoice = new MassiveInvoice();
 
-        $current_month = $this->monthsNumber[date('m')];
+        $current_month = $this->getValueMonthInvoiceConfig($config);
         $message_type = 'error';
         $message = 'No se pueden volver a generar el masivo de facturas del mes de ' . $current_month;
 
@@ -115,7 +98,7 @@ class InvoiceController extends Controller
                 foreach ($services_by_user as $service) {
                     if ($service->status === 'ACTIVO') {
                         $invoice = new Invoice();
-                        $invoice->value = $user->full_payment === 'SI' ? $this->valueInvoice : $this->valueInvoice / 2;
+                        $invoice->value = $user->full_payment === 'SI' ? $this->getValueInvoiceConfig($config) : $this->getValueInvoiceConfig($config) / 2;
                         $invoice->description = 'Servicio acueducto ' . $service->service;
                         $invoice->year_invoiced = date('Y');
                         $invoice->month_invoiced = $current_month;
