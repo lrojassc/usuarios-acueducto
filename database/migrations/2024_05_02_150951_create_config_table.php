@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('month_invoiced');
             $table->integer('value_invoice');
+            $table->integer('value_subscription');
             $table->timestamps();
         });
     }

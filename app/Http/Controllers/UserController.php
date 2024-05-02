@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\UsersImport;
+use App\Models\Config;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Subscription;
@@ -16,8 +17,6 @@ class UserController extends Controller
 {
 
     protected static string $password;
-
-    private int $value_subscription = 700000;
 
     /**
      * Listar usuarios
@@ -45,6 +44,7 @@ class UserController extends Controller
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse {
+        $config = new Config();
         $request->validate([
             'userName' => ['required', 'string'],
             'userDocumentNumber' => ['required', 'numeric', 'digits_between:7,12'],
@@ -81,7 +81,7 @@ class UserController extends Controller
             if ($subscription->save()) {
                 $subscription_id = $subscription::all()->last()->id;
                 $invoice = new Invoice();
-                $invoice->value = $this->value_subscription;
+                $invoice->value = $this->getValueSubscription($config);
                 $invoice->description = 'Suscripción al servicio de acueducto';
                 $invoice->year_invoiced = date('Y');
                 $invoice->month_invoiced = $this->monthsNumber[date('m')];

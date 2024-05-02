@@ -20,6 +20,10 @@
                             <label for="value_invoice">Valor de Las Facturas Mensuales</label>
                         </div>
                         <div class="form-floating mb-3 mt-3 col">
+                            <input type="text" class="form-control" id="value_subscription" name="value_subscription" value="{{ $value_subscription }}">
+                            <label for="value_subscription">Valor de La Suscripción</label>
+                        </div>
+                        <div class="form-floating mb-3 mt-3 col">
                             <select class="form-select" id="monthInvoice" name="monthInvoice">
                                 <option selected value="{{ $month_selected }}">{{ $month_selected }}</option>
                                 @foreach($months as $month)

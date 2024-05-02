@@ -40,4 +40,9 @@ class Controller extends BaseController
         return $data_config[0]->month_invoiced;
     }
 
+    protected function getValueSubscription(Config $config)
+    {
+        $data_config = $config::all();
+        return $data_config[0]->value_subscription;
+    }
 }
