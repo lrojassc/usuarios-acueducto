@@ -105,7 +105,7 @@
                                                     <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalGenerateInvoices{{ $id_service }}">Facturas Adelantadas</button>
                                                     @include('invoice.modal_facturas', [$id_service, $service_name])
                                                 @endif
-                                 
+
 
                                                 <!-- Visualizar boton de eliminar servicio-->
                                                 @if($mode == 'edit')
