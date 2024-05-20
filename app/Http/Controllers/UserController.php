@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\UsersImport;
+use App\Models\Config;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\Subscription;
@@ -16,16 +17,6 @@ class UserController extends Controller
 {
 
     protected static string $password;
-
-    private int $value_subscription = 700000;
-
-    /**
-     * @var array|string[]
-     */
-    protected array $monthsNumber = [
-        '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
-        '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
-    ];
 
     /**
      * Listar usuarios
@@ -53,6 +44,7 @@ class UserController extends Controller
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse {
+        $config = new Config();
         $request->validate([
             'userName' => ['required', 'string'],
             'userDocumentNumber' => ['required', 'numeric', 'digits_between:7,12'],
@@ -89,7 +81,7 @@ class UserController extends Controller
             if ($subscription->save()) {
                 $subscription_id = $subscription::all()->last()->id;
                 $invoice = new Invoice();
-                $invoice->value = $this->value_subscription;
+                $invoice->value = $this->getValueSubscription($config);
                 $invoice->description = 'Suscripción al servicio de acueducto';
                 $invoice->year_invoiced = date('Y');
                 $invoice->month_invoiced = $this->monthsNumber[date('m')];
@@ -122,7 +114,7 @@ class UserController extends Controller
      *
      */
     public function show(User $user) {
-        $invoices_by_user = User::find($user->id())->invoices;
+        $invoices_by_user = Invoice::where('user_id', $user->id())->where('status', '!=', 'INACTIVO')->get();
         $services_by_user = User::find($user->id())->services;
         $total_invoices = $this->getTotalInvoices($invoices_by_user);
         $subscription_status = $user->paid_subscription === 'PAGADA'

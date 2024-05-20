@@ -68,15 +68,21 @@
                             <p style="text-decoration: underline; text-align: center; font-size: 12px!important; margin-bottom: 8px!important;">NIT: 900.260.525-4</p>
                             <table class="table-invoice-massive">
                                 <tr>
-                                    <td class="title-bold pdf-massive-td" style="width: 40%; font-size: 15px!important; padding: 4px!important;">Valor pagado</td>
+                                    <td class="title-bold pdf-massive-td" style="width: 20%; font-size: 15px!important; padding: 4px!important;">Factura</td>
+                                    <td class="pdf-massive-td" style="font-size: 15px!important; padding: 4px!important;">No. {{$invoice['id_ultima_factura']}}</td>
+                                    <td class="title-bold pdf-massive-td" style="width: 20%; font-size: 15px!important; padding: 4px!important;">Código</td>
+                                    <td class="pdf-massive-td" style="font-size: 15px!important; padding: 4px!important;">No. {{$invoice['codigo_usuario']}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="title-bold pdf-massive-td" style="width: 20%; font-size: 15px!important; padding: 4px!important;">Valor</td>
+                                    <td class="pdf-massive-td" style="font-size: 15px!important; padding: 4px!important;"></td>
+                                    <td class="title-bold pdf-massive-td" style="width: 20%; font-size: 15px!important; padding: 4px!important;">Fecha</td>
                                     <td class="pdf-massive-td" style="font-size: 15px!important; padding: 4px!important;"></td>
                                 </tr>
                                 <tr>
-                                    <td class="title-bold pdf-massive-td" style="width: 40%; font-size: 15px!important; padding: 4px!important;">Saldo pendiente</td>
+                                    <td class="title-bold pdf-massive-td" style="width: 20%; height: 25px; font-size: 15px!important; padding: 4px!important;">Recibido</td>
                                     <td class="pdf-massive-td" style="font-size: 15px!important; padding: 4px!important;"></td>
-                                </tr>
-                                <tr>
-                                    <td class="title-bold pdf-massive-td" style="width: 40%; font-size: 15px!important; padding: 4px!important;">Recibido por</td>
+                                    <td class="title-bold pdf-massive-td" style="width: 20%; height: 25px; font-size: 15px!important; padding: 4px!important;"></td>
                                     <td class="pdf-massive-td" style="font-size: 15px!important; padding: 4px!important;"></td>
                                 </tr>
                             </table>

@@ -1,7 +1,6 @@
 <table class="table table-striped">
     <thead>
     <tr>
-        <th scope="col">Seleccione</th>
         <th scope="col">No. Factura</th>
         <th scope="col">Valor</th>
         <th scope="col">Año</th>
@@ -15,7 +14,6 @@
     <tbody class="table-group-divider">
     @foreach($invoices as $invoice)
         <tr>
-            <td type="checkbox" class="form-check-input" ><input id="massivePayment" class="form-check-input" type="checkbox" onclick="obtenerValorCheckbox(this)"></td>
             <td>{{$invoice['id']}}</td>
             <td>{{$invoice['value']}}</td>
             <td>{{$invoice['year_invoiced']}}</td>
@@ -29,6 +27,8 @@
                 {{$invoice['status']}}</td>
             <td>{{$invoice['concept']}}</td>
             <td><a href="{{ route('invoice.show', $invoice['id']) }}">PAGAR</a></td>
+            <td><a href="{{ route('invoice.delete', $invoice->id) }}">ELIMINAR</a></td>
+            <td><a href="{{ route('invoice.edit', $invoice->id) }}">EDITAR</a></td>
         </tr>
     @endforeach
     </tbody>

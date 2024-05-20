@@ -8,20 +8,15 @@
     </div>
 @endif
 
-<ul class="nav nav-underline">
-    <li class="nav-item">
-        <a class="nav-link mb-2 fs-5" type="button" aria-current="page" data-bs-toggle="modal" data-bs-target="#modalGenerateInvoices">¿Desea generar facturas masivas para pago adelantado? -- PENDIENTE AJUSTAR</a>
-    </li>
-</ul>
-<div class="modal fade" id="modalGenerateInvoices" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalGenerateInvoices{{$id_service}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Generar Facturas Para Pago Adelantado</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Generar Facturas Para Pago Adelantado "{{$service_name}}"</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('invoice.create_invoice_by_user', $user) }}" method="POST">
+                <form action="{{ route('invoice.create_invoice_for_user_by_service', $service) }}" id="modalGenerateInvoices" method="POST">
                     @csrf
 
                     <div class="mb-3">
@@ -79,7 +74,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
-                        <button id="btn-guardar_factura_por_usuario" type="submit" class="btn btn-primary" >Generar</button>
+                        <button id="btn-guardar_factura_por_usuario{{$id_service}}" type="submit" class="btn btn-primary" >Generar</button>
                     </div>
                 </form>
             </div>

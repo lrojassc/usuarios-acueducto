@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Config;
 use App\Models\Invoice;
 use App\Models\MassiveInvoice;
 use App\Models\Payment;
@@ -14,32 +15,12 @@ class InvoiceController extends Controller
 {
 
     /**
-     * @var array|string[]
-     */
-    private array $monthsDetails = [
-        'ENERO' => 'ENERO', 'FEBRERO' => 'FEBRERO', 'MARZO' => 'MARZO', 'ABRIL' => 'ABRIL',
-        'MAYO' => 'MAYO', 'JUNIO' => 'JUNIO', 'JULIO' => 'JULIO', 'AGOSTO' => 'AGOSTO', 'SEPTIEMBRE' => 'SEPTIEMBRE',
-        'OCTUBRE' => 'OCTUBRE', 'NOVIEMBRE' => 'NOVIEMBRE', 'DICIEMBRE' => 'DICIEMBRE'
-    ];
-
-    /**
-     * @var array|string[]
-     */
-    private array $monthsNumber = [
-        '01' => 'ENERO', '02' => 'FEBRERO', '03' => 'MARZO', '04' => 'ABRIL', '05' => 'MAYO', '06' => 'JUNIO',
-        '07' => 'JULIO', '08' => 'AGOSTO', '09' => 'SEPTIEMBRE', '10' => 'OCTUBRE', '11' => 'NOVIEMBRE', '12' => 'DICIEMBRE'
-    ];
-
-    private int $valueInvoice = 10000;
-
-    /**
      * Lista todas las facturas
      *
      */
     public function list()
     {
-        $invoices = Invoice::all();
-        //return $invoices;
+        $invoices = Invoice::where('status', '!=', 'INACTIVO')->get();
         return view('invoice.list', compact('invoices'));
     }
 
@@ -98,11 +79,12 @@ class InvoiceController extends Controller
      */
     public function createMassive(): RedirectResponse
     {
+        $config = new Config();
         $user_model = new User();
         $users = $user_model::where('status', 'ACTIVO')->get();
         $massive_invoice = new MassiveInvoice();
 
-        $current_month = $this->monthsNumber[date('m')];
+        $current_month = $this->getValueMonthInvoiceConfig($config);
         $message_type = 'error';
         $message = 'No se pueden volver a generar el masivo de facturas del mes de ' . $current_month;
 
@@ -114,17 +96,19 @@ class InvoiceController extends Controller
             foreach ($users_without_invoices as $user) {
                 $services_by_user = $user->services;
                 foreach ($services_by_user as $service) {
-                    $invoice = new Invoice();
-                    $invoice->value = $user->full_payment === 'SI' ? $this->valueInvoice : $this->valueInvoice/2;
-                    $invoice->description = 'Servicio acueducto ' . $service->service;
-                    $invoice->year_invoiced = date('Y');
-                    $invoice->month_invoiced = $current_month;
-                    $invoice->concept = 'MENSUALIDAD';
-                    $invoice->status = 'PENDIENTE';
-                    $invoice->user_id = $user->id;
-                    $invoice->subscription_id = $service->id;
+                    if ($service->status === 'ACTIVO') {
+                        $invoice = new Invoice();
+                        $invoice->value = $user->full_payment === 'SI' ? $this->getValueInvoiceConfig($config) : $this->getValueInvoiceConfig($config) / 2;
+                        $invoice->description = 'Servicio acueducto ' . $service->service;
+                        $invoice->year_invoiced = date('Y');
+                        $invoice->month_invoiced = $current_month;
+                        $invoice->concept = 'MENSUALIDAD';
+                        $invoice->status = 'PENDIENTE';
+                        $invoice->user_id = $user->id;
+                        $invoice->subscription_id = $service->id;
 
-                    $invoice->save();
+                        $invoice->save();
+                    }
                 }
             }
 
@@ -139,13 +123,61 @@ class InvoiceController extends Controller
         return redirect()->route('invoice.list')->with($message_type, $message);
     }
 
+    /**
+     * Ver informacion de la factura para pagar
+     *
+     * @param Invoice $invoice
+     * @param Payment $payment
+     */
     public function show(Invoice $invoice, Payment $payment)
     {
         $payments = $invoice::find($invoice->id)->payments;
         $pago_realizado = $payment->getTotalPayment($payments);
         $payment_total = '$' . number_format(num: $pago_realizado, thousands_separator: '.') ?? '$0';
+        $service = $invoice->subscription->service;
 
-        return view('invoice.show', compact('invoice', 'payments', 'payment_total'));
+        return view('invoice.show', compact('invoice', 'payments', 'payment_total', 'service'));
+    }
+
+    /**
+     * Vista para actualizar algunos campos de la factura
+     *
+     * @param Invoice $invoice
+     */
+    public function edit(Invoice $invoice)
+    {
+        return view('invoice.edit', compact('invoice'));
+    }
+
+    /**
+     * Actualizar informacion de la factura
+     *
+     * @param Request $request
+     * @param Invoice $invoice
+     *
+     */
+    public function update(Request $request, Invoice $invoice)
+    {
+        $value_invoice = str_replace(["$", "."], '', $request->updateValueInvoice);
+        $invoice->value = $value_invoice;
+        $invoice->save();
+
+        $invoices = Invoice::where('status', '!=', 'INACTIVO')->get();
+        return view('invoice.list', compact('invoices'));
+    }
+
+    /**
+     * Inactivar factura
+     *
+     * @param Invoice $invoice
+     *
+     * @return RedirectResponse
+     */
+    public function delete(Invoice $invoice)
+    {
+        $invoice->status = 'INACTIVO';
+        $invoice->save();
+        return redirect()->route('invoice.list');
     }
 
     /**
@@ -156,8 +188,9 @@ class InvoiceController extends Controller
      *
      * @return RedirectResponse
      */
-    public function createInvoicesByUser(User $user, Request $request): RedirectResponse
+    public function createInvoicesForUserByService($service, Request $request): RedirectResponse
     {
+        $service = Subscription::find($service);
         $months_data = $request->post();
         $current_year = date('Y') !== $request->year ? date('Y') : $request->year;
 

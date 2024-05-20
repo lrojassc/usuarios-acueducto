@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('value');
             $table->string('description');
             $table->string('method');
+            $table->string('month_invoiced')->nullable();
             $table->unsignedBigInteger('invoice_id');
 
             $table->foreign('invoice_id')

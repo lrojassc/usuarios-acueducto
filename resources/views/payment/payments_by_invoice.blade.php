@@ -10,10 +10,6 @@
                     <th scope="col">Descripción</th>
                     <th scope="col">Método</th>
                     <th scope="col">Mes Pagado</th>
-                    <th scope="col">Descripción Factura</th>
-                    <th scope="col">Concepto Factura</th>
-                    <th scope="col">Suscriptor</th>
-                    <th scope="col">Servicio</th>
                     <th scope="col">Fecha de pago</th>
                     <th scope="col">Acción</th>
                 </tr>
@@ -25,6 +21,7 @@
                         <td>{{$payment->value}}</td>
                         <td>{{$payment->description}}</td>
                         <td>{{$payment->method}}</td>
+                        <td>{{$payment->month_invoiced}}</td>
                         <td>{{$payment->created_at}}</td>
                         <td><a href="{{ route('payment.show', $payment->id) }}">VER</a></td>
                     </tr>

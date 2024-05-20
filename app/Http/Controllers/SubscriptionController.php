@@ -35,7 +35,13 @@ class SubscriptionController extends Controller
     public function getServicesByUser($user_id): \Illuminate\Http\JsonResponse
     {
         $services_by_user = User::find($user_id)->services;
-        return response()->json(['services' => $services_by_user]);
+        $services = [];
+        foreach ($services_by_user as $service) {
+            if ($service->status == 'ACTIVO') {
+                $services[] = $service;
+            }
+        }
+        return response()->json(['services' => $services]);
     }
 
     /**

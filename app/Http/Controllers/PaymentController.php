@@ -74,6 +74,7 @@ class PaymentController extends Controller
                 $payment->value = $request->paymentValue;
                 $payment->description = $request->paymentDescription;
                 $payment->method = 'EFECTIVO';
+                $payment->month_invoiced = $invoice->month_invoiced;
                 $payment->invoice_id = $invoice->id;
 
                 $payment->save();
